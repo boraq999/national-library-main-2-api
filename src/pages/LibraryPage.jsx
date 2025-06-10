@@ -1,0 +1,353 @@
+import React, { useState, useEffect } from 'react';
+import {
+  Container, Typography, Box, TextField, Select, MenuItem, InputLabel, FormControl, Grid, Card, CardContent, Button
+} from '@mui/material';
+import BookOutlinedIcon from '@mui/icons-material/BookOutlined';
+import PersonOutlineIcon from '@mui/icons-material/PersonOutline';
+import SchoolOutlinedIcon from '@mui/icons-material/SchoolOutlined';
+import BusinessCenterOutlinedIcon from '@mui/icons-material/BusinessCenterOutlined';
+import CalendarMonthOutlinedIcon from '@mui/icons-material/CalendarMonthOutlined';
+import AccountBalanceOutlinedIcon from '@mui/icons-material/AccountBalanceOutlined';
+import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
+import Autocomplete from '@mui/material/Autocomplete';
+
+const LibraryPage = () => {
+  const [search, setSearch] = useState('');
+  const [latestData, setLatestData] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const [selectedUniversity, setSelectedUniversity] = useState(null);
+  const [selectedSpecialization, setSelectedSpecialization] = useState(null);
+  const [selectedDegree, setSelectedDegree] = useState(null);
+  const [universities, setUniversities] = useState([]);
+  const [specializations, setSpecializations] = useState([]);
+  const [degrees, setDegrees] = useState([]);
+  const [pendingSearch, setPendingSearch] = useState('');
+  const [pendingUniversity, setPendingUniversity] = useState(null);
+  const [pendingSpecialization, setPendingSpecialization] = useState(null);
+  const [pendingDegree, setPendingDegree] = useState(null);
+  const [showFilterWarning, setShowFilterWarning] = useState(false);
+  // إضافة خيار للمستخدم لتحديد نوع البحث (عنوان أو باحث)
+  const [searchType, setSearchType] = useState('title'); // 'title' أو 'author'
+
+  useEffect(() => {
+    let isMounted = true;
+    const fetchLatest = async () => {
+      setLoading(true);
+      setError(null);
+      try {
+        const res = await fetch('https://alalem.c-library.org/api/theses/latest');
+        if (!res.ok) throw new Error('network');
+        const data = await res.json();
+        if (isMounted) setLatestData(Array.isArray(data) ? data : []);
+      } catch (err) {
+        if (isMounted) setError('تعذر الاتصال بالخادم. يرجى التحقق من اتصالك بالإنترنت أو المحاولة لاحقاً.');
+        // لا تفرغ النتائج حتى تبقى الصفحة كما هي
+      } finally {
+        if (isMounted) setLoading(false);
+      }
+    };
+    fetchLatest();
+    return () => { isMounted = false; };
+  }, []);
+
+  // جلب بيانات الفلاتر
+  useEffect(() => {
+    fetch('https://alalem.c-library.org/api/universities')
+      .then(res => res.json())
+      .then(data => setUniversities(Array.isArray(data) ? data : []));
+    fetch('https://alalem.c-library.org/api/specializations')
+      .then(res => res.json())
+      .then(data => setSpecializations(Array.isArray(data) ? data : []));
+    fetch('https://alalem.c-library.org/api/degrees')
+      .then(res => res.json())
+      .then(data => setDegrees(Array.isArray(data) ? data : []));
+  }, []);
+
+  // تعديل منطق تفعيل زر البحث: يجب اختيار جامعة أو تخصص (ولا يكفي اختيار الدرجة العلمية فقط)
+  // تفعيل زر البحث إذا تم اختيار جامعة أو تخصص أو تم إدخال نص في حقل البحث
+  const isSearchEnabled = !!pendingUniversity || !!pendingSpecialization || !!pendingSearch.trim();
+
+  // عند الضغط على زر البحث يتم جلب النتائج من /api/theses/search مع الفلاتر
+  const handleSearch = async () => {
+    if (!pendingSearch.trim() && !pendingUniversity && !pendingSpecialization && !pendingDegree) {
+      setShowFilterWarning(true);
+      return;
+    }
+    setShowFilterWarning(false);
+    setSearch(pendingSearch);
+    setSelectedUniversity(pendingUniversity);
+    setSelectedSpecialization(pendingSpecialization);
+    setSelectedDegree(pendingDegree);
+    setLoading(true);
+    setError(null);
+    const params = new URLSearchParams();
+    if (pendingUniversity) params.append('university_id', pendingUniversity.id);
+    if (pendingSpecialization) params.append('specialization_id', pendingSpecialization.id);
+    if (pendingDegree) params.append('degree_id', pendingDegree.id);
+    if (pendingSearch.trim()) {
+      if (searchType === 'title') {
+        params.append('title', pendingSearch.trim());
+      } else if (searchType === 'author') {
+        params.append('author', pendingSearch.trim());
+      }
+    }
+    try {
+      const res = await fetch(`https://alalem.c-library.org/api/theses/search?${params.toString()}`);
+      if (!res.ok) throw new Error('network');
+      const data = await res.json();
+      setLatestData(Array.isArray(data) ? data : []);
+    } catch (err) {
+      setError('تعذر الاتصال بالخادم. يرجى التحقق من اتصالك بالإنترنت أو المحاولة لاحقاً.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // عند الضغط على زر مسح الفلاتر، إعادة جلب بيانات latest
+  const handleClear = async () => {
+    setPendingSearch('');
+    setPendingUniversity(null);
+    setPendingSpecialization(null);
+    setPendingDegree(null);
+    setSearch('');
+    setSelectedUniversity(null);
+    setSelectedSpecialization(null);
+    setSelectedDegree(null);
+    setLoading(true);
+    setError(null);
+    try {
+      const res = await fetch('https://alalem.c-library.org/api/theses/latest');
+      if (!res.ok) throw new Error('network');
+      const data = await res.json();
+      setLatestData(Array.isArray(data) ? data : []);
+    } catch (err) {
+      setError('تعذر الاتصال بالخادم. يرجى التحقق من اتصالك بالإنترنت أو المحاولة لاحقاً.');
+      // لا تفرغ النتائج حتى تبقى الصفحة كما هي
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // لا حاجة للفلترة المحلية بعد الآن
+  // const filtered = ...
+  // const results = ...
+  const results = latestData;
+
+  return (
+    <Container maxWidth="lg" sx={{ mt: 5, mb: 5 }}>
+      <Typography variant="h4" align="center" gutterBottom sx={{ fontWeight: 700 }}>
+        المكتبة الإلكترونية
+      </Typography>
+      <Box
+        sx={{
+          background: (theme) => theme.palette.mode === 'light' ? 'rgba(255,255,255,0.6)' : 'rgba(255,255,255,0.1)',
+          borderRadius: 3,
+          p: 3,
+          mb: 4,
+          boxShadow: 3,
+          display: 'flex',
+          flexDirection: 'column',
+          gap: 2,
+        }}
+      >
+        {/* السطر الأول: البحث والأزرار */}
+        <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 2, mb: 2, flexDirection: { xs: 'column', sm: 'row' }, justifyContent: 'space-between', position: 'relative' }}>
+          {showFilterWarning && (
+            <Box sx={{ width: '100%', display: 'flex', justifyContent: 'center', mb: 1 }}>
+              <Typography align="center" color="warning.main" sx={{ fontWeight: 700, fontSize: 16, background: '#fffbe6', border: '1px solid #ffe082', borderRadius: 2, px: 3, py: 1 }}>
+                الرجاء اختيار أحد الفلاتر على الأقل
+              </Typography>
+            </Box>
+          )}
+          <TextField
+            label="ابحث باسم الباحث أو الرسالة..."
+            variant="outlined"
+            value={pendingSearch}
+            onChange={e => setPendingSearch(e.target.value)}
+            sx={{ minWidth: 220, flex: 1, direction: 'rtl' }}
+            inputProps={{ style: { direction: 'rtl' } }}
+          />
+          {/* إضافة قائمة منسدلة لاختيار نوع البحث */}
+          <FormControl sx={{ minWidth: 140, mr: 1 }}>
+            <InputLabel id="search-type-label">نوع البحث</InputLabel>
+            <Select
+              labelId="search-type-label"
+              id="search-type-select"
+              value={searchType}
+              label="نوع البحث"
+              onChange={e => setSearchType(e.target.value)}
+            >
+              <MenuItem value="title">عنوان الرسالة</MenuItem>
+              <MenuItem value="author">اسم الباحث</MenuItem>
+            </Select>
+          </FormControl>
+          <Button
+            variant="contained"
+            color="primary"
+            sx={{ minWidth: 120, fontWeight: 700, height: 56, alignSelf: 'center', mt: { xs: 2, md: 0 } }}
+            onClick={handleSearch}
+            disabled={!isSearchEnabled}
+          >
+            بحث
+          </Button>
+          <Button
+            variant="outlined"
+            color="secondary"
+            sx={{ minWidth: 120, fontWeight: 700, height: 56, alignSelf: 'center', mt: { xs: 2, md: 0 } }}
+            onClick={handleClear}
+          >
+            مسح الفلاتر
+          </Button>
+        </Box>
+        {/* السطر الثاني: الفلاتر المنسدلة */}
+        <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 2, mb: 2, flexDirection: { xs: 'column', sm: 'row' }, justifyContent: 'space-between' }}>
+          <Autocomplete
+            options={universities}
+            getOptionLabel={option => option.name || ''}
+            value={pendingUniversity}
+            onChange={(_, value) => setPendingUniversity(value)}
+            renderInput={params => <TextField {...params} label="الجامعة" variant="outlined" />}
+            sx={{ minWidth: 180, flex: 1 }}
+            isOptionEqualToValue={(option, value) => option?.id === value?.id}
+          />
+          <Autocomplete
+            options={specializations}
+            getOptionLabel={option => option.name || ''}
+            value={pendingSpecialization}
+            onChange={(_, value) => setPendingSpecialization(value)}
+            renderInput={params => <TextField {...params} label="التخصص" variant="outlined" />}
+            sx={{ minWidth: 180, flex: 1 }}
+            isOptionEqualToValue={(option, value) => option?.id === value?.id}
+          />
+          <Autocomplete
+            options={degrees}
+            getOptionLabel={option => option.name || ''}
+            value={pendingDegree}
+            onChange={(_, value) => setPendingDegree(value)}
+            renderInput={params => <TextField {...params} label="الدرجة العلمية" variant="outlined" />}
+            sx={{ minWidth: 180, flex: 1 }}
+            isOptionEqualToValue={(option, value) => option?.id === value?.id}
+          />
+        </Box>
+      </Box>
+      <Grid container spacing={3}>
+        {loading ? (
+          <Grid item xs={12}>
+            <Typography align="center" color="text.secondary">جاري تحميل البيانات...</Typography>
+          </Grid>
+        ) : error ? (
+          <Grid item xs={12}>
+            <Box sx={{ p: 3, textAlign: 'center', color: 'error.main', background: (theme) => theme.palette.mode === 'light' ? '#fff0f0' : '#2a1a1a', borderRadius: 2, border: '1px solid', borderColor: 'error.main', fontWeight: 700 }}>
+              <Typography align="center" color="error.main" sx={{ fontWeight: 700, fontSize: 18 }}>{error}</Typography>
+              <Typography align="center" color="text.secondary" sx={{ mt: 1, fontSize: 15 }}>
+                تأكد من اتصالك بالإنترنت أو أعد المحاولة لاحقاً.
+              </Typography>
+            </Box>
+          </Grid>
+        ) : results.length === 0 ? (
+          <Grid item xs={12}>
+            <Typography align="center" color="text.secondary">
+              لا توجد نتائج مطابقة.
+            </Typography>
+          </Grid>
+        ) : (
+          results.map(item => (
+            <Grid item xs={12} md={6} key={item.id}>
+              <Box
+                sx={{
+                  background: (theme) => theme.palette.mode === 'light' ? '#f4faff' : 'rgba(255,255,255,0.07)',
+                  borderRadius: 3,
+                  boxShadow: 0,
+                  border: (theme) => theme.palette.mode === 'light' ? '1.5px solid #cbe3f6' : '1.5px solid rgba(255,255,255,0.13)',
+                  p: 2.5,
+                  mb: 2,
+                  direction: 'rtl',
+                  textAlign: 'right',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  gap: 2,
+                  alignItems: 'flex-end',
+                  minHeight: 180,
+                  transition: 'background 0.3s, border 0.3s',
+                }}
+              >
+                <Typography variant="h6" sx={{ fontWeight: 700, color: (theme) => theme.palette.mode === 'light' ? '#1a3c5e' : '#fff', mb: 1, textAlign: 'right', fontSize: { xs: 16, md: 18 }, display: 'flex', alignItems: 'center', gap: 1, direction: 'rtl',textAlign: 'end' }}>
+                  <BookOutlinedIcon sx={{ ml: 1, color: 'primary.main' }} />
+                  {item.title}
+                </Typography>
+                <Box sx={{ borderTop: '1px solid', borderColor: (theme) => theme.palette.mode === 'light' ? '#cbe3f6' : '#2a3a4d', width: '100%', mb: 2 }} />
+                <Grid container spacing={2} alignItems="center" direction="row-reverse">
+                  <Grid item xs={12} sm={6}>
+                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, flexDirection: 'row-reverse', background: (theme) => theme.palette.mode === 'light' ? '#f8fbfd' : '#232b36', borderRadius: 2, p: 1, border: (theme) => theme.palette.mode === 'light' ? '1px solid #e3eaf2' : '1px solid #2a3a4d', fontSize: 15, color: (theme) => theme.palette.mode === 'light' ? '#1a3c5e' : '#fff', direction: 'rtl', textAlign: 'right' }}>
+                      <PersonOutlineIcon sx={{ color: 'primary.main', ml: 1 }} />
+                      <Typography sx={{ fontWeight: 500 }}>{item.author?.name || ''}</Typography>
+                    </Box>
+                  </Grid>
+                  <Grid item xs={12} sm={6}>
+                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, flexDirection: 'row-reverse', background: (theme) => theme.palette.mode === 'light' ? '#f8fbfd' : '#232b36', borderRadius: 2, p: 1, border: (theme) => theme.palette.mode === 'light' ? '1px solid #e3eaf2' : '1px solid #2a3a4d', fontSize: 15, color: (theme) => theme.palette.mode === 'light' ? '#1a3c5e' : '#fff', direction: 'rtl', textAlign: 'right' }}>
+                      <AccountBalanceOutlinedIcon sx={{ color: 'primary.main', ml: 1 }} />
+                      <Typography sx={{ fontWeight: 500 }}>{item.university?.name || ''}</Typography>
+                    </Box>
+                  </Grid>
+                  <Grid item xs={12} sm={6}>
+                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, flexDirection: 'row-reverse', background: (theme) => theme.palette.mode === 'light' ? '#f8fbfd' : '#232b36', borderRadius: 2, p: 1, border: (theme) => theme.palette.mode === 'light' ? '1px solid #e3eaf2' : '1px solid #2a3a4d', fontSize: 15, color: (theme) => theme.palette.mode === 'light' ? '#1a3c5e' : '#fff', direction: 'rtl', textAlign: 'right' }}>
+                      <CalendarMonthOutlinedIcon sx={{ color: 'primary.main', ml: 1 }} />
+                      <Typography sx={{ fontWeight: 500 }}>{item.year ? item.year.split('/').pop() : ''}</Typography>
+                    </Box>
+                  </Grid>
+                  <Grid item xs={12} sm={6}>
+                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, flexDirection: 'row-reverse', background: (theme) => theme.palette.mode === 'light' ? '#f8fbfd' : '#232b36', borderRadius: 2, p: 1, border: (theme) => theme.palette.mode === 'light' ? '1px solid #e3eaf2' : '1px solid #2a3a4d', fontSize: 15, color: (theme) => theme.palette.mode === 'light' ? '#1a3c5e' : '#fff', direction: 'rtl', textAlign: 'right' }}>
+                      <SchoolOutlinedIcon sx={{ color: 'primary.main', ml: 1 }} />
+                      <Typography sx={{ fontWeight: 500 }}>{item.degree?.name || ''}</Typography>
+                    </Box>
+                  </Grid>
+                  <Grid item xs={12} sm={6}>
+                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, flexDirection: 'row-reverse', background: (theme) => theme.palette.mode === 'light' ? '#f8fbfd' : '#232b36', borderRadius: 2, p: 1, border: (theme) => theme.palette.mode === 'light' ? '1px solid #e3eaf2' : '1px solid #2a3a4d', fontSize: 15, color: (theme) => theme.palette.mode === 'light' ? '#1a3c5e' : '#fff', direction: 'rtl', textAlign: 'right' }}>
+                      <BusinessCenterOutlinedIcon sx={{ color: 'primary.main', ml: 1 }} />
+                      <Typography sx={{ fontWeight: 500 }}>{item.specialization?.name || ''}</Typography>
+                    </Box>
+                  </Grid>
+                  <Grid item xs={12} sm={6}>
+                    <Button
+                      variant="contained"
+                      sx={{
+                        fontSize: 13,
+                        borderRadius: 2,
+                        minWidth: 100,
+                        background: '#1976d2',
+                        background: '#0077b6',
+                        color: 'white',
+                        mt: 1,
+                        px: 3,
+                        py: 1.2,
+                        boxShadow: 'none',
+                        direction: 'rtl',
+                        textAlign: 'right',
+                        '&:hover': {
+                          background: '#125ea2',
+                        },
+                        display: 'flex',
+                        flexDirection: 'row-reverse',
+                        alignItems: 'center',
+                      }}
+                      href={item.pdf_path ? `https://alalem.c-library.org${item.pdf_path.replace('/home/c-library-alalem/htdocs/alalem.c-library.org/storage/app/public','/storage')}` : undefined}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      disabled={!item.pdf_path}
+                    >
+                      <VisibilityOutlinedIcon sx={{ mr: 2 }} />
+                      اطلع على الرسالة
+                    </Button>
+                  </Grid>
+                </Grid>
+              </Box>
+            </Grid>
+          ))
+        )}
+      </Grid>
+    </Container>
+  );
+};
+
+export default LibraryPage;
