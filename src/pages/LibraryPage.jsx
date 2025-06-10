@@ -151,7 +151,7 @@ const LibraryPage = () => {
           gap: 2,
         }}
       >
-        {/* السطر الأول: البحث والأزرار */}
+        {/* السطر الأول: البحث ونوع البحث */}
         <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 2, mb: 2, flexDirection: { xs: 'column', sm: 'row' }, justifyContent: 'space-between', position: 'relative' }}>
           {showFilterWarning && (
             <Box sx={{ width: '100%', display: 'flex', justifyContent: 'center', mb: 1 }}>
@@ -182,23 +182,6 @@ const LibraryPage = () => {
               <MenuItem value="author">اسم الباحث</MenuItem>
             </Select>
           </FormControl>
-          <Button
-            variant="contained"
-            color="primary"
-            sx={{ minWidth: 120, fontWeight: 700, height: 56, alignSelf: 'center', mt: { xs: 2, md: 0 } }}
-            onClick={handleSearch}
-            disabled={!isSearchEnabled}
-          >
-            بحث
-          </Button>
-          <Button
-            variant="outlined"
-            color="secondary"
-            sx={{ minWidth: 120, fontWeight: 700, height: 56, alignSelf: 'center', mt: { xs: 2, md: 0 } }}
-            onClick={handleClear}
-          >
-            مسح الفلاتر
-          </Button>
         </Box>
         {/* السطر الثاني: الفلاتر المنسدلة */}
         <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 2, mb: 2, flexDirection: { xs: 'column', sm: 'row' }, justifyContent: 'space-between' }}>
@@ -229,6 +212,26 @@ const LibraryPage = () => {
             sx={{ minWidth: 180, flex: 1 }}
             isOptionEqualToValue={(option, value) => option?.id === value?.id}
           />
+        </Box>
+        {/* السطر الثالث: أزرار البحث ومسح الفلاتر */}
+        <Box sx={{ display: 'flex', flexDirection: 'row', gap: 2, justifyContent: { xs: 'center', sm: 'flex-end' }, width: '100%' }}>
+          <Button
+            variant="contained"
+            color="primary"
+            sx={{ minWidth: 120, fontWeight: 700, height: 56, alignSelf: 'center' }}
+            onClick={handleSearch}
+            disabled={!isSearchEnabled}
+          >
+            بحث
+          </Button>
+          <Button
+            variant="outlined"
+            color="secondary"
+            sx={{ minWidth: 120, fontWeight: 700, height: 56, alignSelf: 'center' }}
+            onClick={handleClear}
+          >
+            مسح الفلاتر
+          </Button>
         </Box>
       </Box>
       <Grid container spacing={3}>
