@@ -82,13 +82,26 @@ const HeroSection = () => {
                 sx={{ 
                   fontWeight: 900,
                   mb: 2,
-                  fontSize: { xs: '2.5rem', sm: '3rem', md: '3.5rem' },
+                  fontSize: { xs: '2.5rem', sm: '3rem', md: '3.8rem' },
                   color: '#fff',
                   letterSpacing: 1,
                   textShadow: '0 4px 24px rgba(0,0,0,0.25)',
                 }}
               >
-                المكتبة الوطنية
+                المكتبة المركزية
+              </Typography>
+              <Typography 
+                variant="h5" 
+                sx={{ 
+                  mb: 4,
+                  fontWeight: 500,
+                  color: 'rgba(255,255,255,0.92)',
+                  lineHeight: 1.7,
+                  fontSize: { xs: '1.1rem', sm: '1.3rem', md: '1.6rem' },
+                  textShadow: '0 2px 12px rgba(0,0,0,0.18)',
+                }}
+              >
+                الهيئة الليبية للبحث العلمي
               </Typography>
               <Typography 
                 variant="h5" 
