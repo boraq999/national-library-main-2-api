@@ -27,14 +27,8 @@ const HeroSection = () => {
           position: 'absolute',
           inset: 0,
           background: theme.palette.mode === 'light'
-            // ? 'linear-gradient(120deg, #e0eafc99 0%, #f5f7fa99 100%)'
-            // ? 'linear-gradient(120deg, rgb(0 0 0 / 60%) 0%, rgb(87 113 11 / 32%) 100%)'
             ? 'linear-gradient(120deg,rgba(26, 28, 29, 0.6) 0%,rgba(5, 16, 29, 0.77) 100%)'
-            
             : 'linear-gradient(120deg,rgba(26, 28, 29, 0.6) 0%,rgba(5, 16, 29, 0.6) 100%)',
-            
-            // : 'linear-gradient(120deg, #2C3E5099 0%, #1a263499 100%)',
-
           zIndex: 1,
         },
       }}
@@ -51,6 +45,7 @@ const HeroSection = () => {
           background: theme.palette.primary.main,
           opacity: 0.1,
           zIndex: 2,
+          display: { xs: 'none', md: 'block' }
         }}
       />
       <Box
@@ -64,8 +59,60 @@ const HeroSection = () => {
           background: theme.palette.secondary.main,
           opacity: 0.1,
           zIndex: 2,
+          display: { xs: 'none', md: 'block' }
         }}
       />
+      
+      {/* Right Banner Image */}
+      <Box
+        component="img"
+        src="/banner/banner-2 -Photoroom.png"
+        alt="Banner image 2"
+        sx={{
+          position: 'absolute',
+          top: '50%',
+          right: { xs: '5%', sm: '1%', md: '2%', lg: '5%' },
+          width: 'auto',
+          maxWidth: { xs: 100, sm: 250 },
+          height: 'auto',
+          zIndex: 2,
+          opacity: 1,
+          transform: 'translateY(-50%)',
+          transition: 'opacity 0.3s, transform 0.3s',
+          backdropFilter: 'blur(10px)',
+          borderRadius: '10%',
+          background: '#ffffffa3',
+          p: { xs: 1, sm: 2},
+          border:'2px solid #fff',
+          display: { xs: 'none', sm: 'block' }
+        }}
+      />
+      
+      {/* Left Banner Image */}
+      <Box
+        component="img"
+        src="/banner/banner-1-Photoroom.png"
+        alt="Banner image 1"
+        sx={{
+          position: 'absolute',
+          top: '50%',
+          left: { xs: '5%', sm: '1%', md: '2%', lg: '5%' },
+          width: 'auto',
+          maxWidth: { xs: 100, sm: 230 },
+          height: 'auto',
+          zIndex: 2,
+          opacity: 1,
+          transform: 'translateY(-50%)',
+          transition: 'opacity 0.3s, transform 0.3s',
+          backdropFilter: 'blur(10px)',
+          borderRadius: '10%',
+          background: '#ffffffa3',
+          border:'2px solid #fff',
+          p: { xs: 1, sm: 2},
+          display: { xs: 'none', sm: 'block' }
+        }}
+      />
+
       <Container maxWidth="lg" sx={{ position: 'relative', zIndex: 3, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: '70vh' }}>
         <Grid 
           container 
@@ -116,8 +163,46 @@ const HeroSection = () => {
               >
                 نساعدك في اعتماد عنوانك البحثي وضمان تفرّده
               </Typography>
+
+
+
+        {/* صور البانر للجوال */}
+              <Box sx={{ display: { xs: 'flex', sm: 'none' }, justifyContent: 'center', gap: 1,m:0 }}>
+                  <Box
+                    component="img"
+                    src="/banner/banner-2 -Photoroom.png"
+                    alt="Banner image 2"
+                    sx={{
+                      width: 170,
+                      maxWidth: '45vw',
+                      height: 'auto',
+                      borderRadius: '10%',
+                      background: '#ffffffa3',
+                      border: '2px solid #fff',
+                      p: 1,
+                      boxShadow: 2
+                    }}
+                  />
+                  <Box
+                    component="img"
+                    src="/banner/banner-1-Photoroom.png"
+                    alt="Banner image 1"
+                    sx={{
+                      width: 150,
+                      maxWidth: '40vw',
+                      height: 'auto',
+                      borderRadius: '10%',
+                      background: '#ffffffa3',
+                      border: '2px solid #fff',
+                      p: 1,
+                      boxShadow: 2
+                    }}
+                  />
+                </Box>
+
+
              
-              <Box sx={{ mt: 15, display: 'flex', justifyContent: 'center' }}>
+              <Box sx={{ mt: 10, display: 'flex', justifyContent: 'center' }}>
                 <Box
                   sx={{
                     background: 'rgba(255,255,255,0.13)',
@@ -159,6 +244,7 @@ const HeroSection = () => {
             </Box>
           </Grid>
         </Grid>
+
       </Container>
     </Box>
   );

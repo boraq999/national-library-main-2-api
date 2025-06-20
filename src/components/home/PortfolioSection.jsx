@@ -4,7 +4,8 @@ import { Box, Typography, Grid, Card, CardMedia, Container, useTheme } from '@mu
 const images = [
   '/portfolio/FB_IMG_1748454455487.jpg',
   // '/portfolio/FB_IMG_1748454508543.jpg',
-  '/portfolio/IMG-20250528-WA0000.jpg',
+  '/portfolio/gall.jpg',
+  // '/portfolio/IMG-20250528-WA0000.jpg',
   '/portfolio/FB_IMG_1748454618764.jpg',
   '/portfolio/FB_IMG_1748454697508.jpg',
   '/portfolio/IMG-20250528-WA0006.jpg',
