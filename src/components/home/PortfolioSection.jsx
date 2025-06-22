@@ -1,4 +1,5 @@
 import { Box, Typography, Grid, Card, CardMedia, Container, useTheme } from '@mui/material';
+import MainTitle from '../MainTitle';
 
 // قائمة الصور من مجلد public/portfolio
 const images = [
@@ -17,22 +18,16 @@ const PortfolioSection = () => {
     <Box
       sx={{
         py: { xs: 6, md: 10 },
-        background: theme.palette.mode === 'light'
-          ? 'linear-gradient(120deg, #e0eafc 0%, #f5f7fa 100%)'
-          : 'linear-gradient(120deg, #23272f 0%, #2C3E50 100%)',
+        background: theme.palette.bg2.main,    
+        ...theme.bgGrid2,   
+
       }}
     >
-      <Container maxWidth="lg">
-        <Typography
-          variant="h3"
-          align="center"
-          fontWeight={800}
-          mb={6}
-          color={theme.palette.mode === 'light' ? '#2C3E50' : '#fff'}
-        >
-          معرض الأعمال
-        </Typography>
-        <Grid container spacing={3} justifyContent="center">
+      <Container maxWidth="lg" sx={{display:'flex', flexDirection:'column'}}>
+
+        <MainTitle mainTitle={"معرض الأعمال"} />
+
+        <Grid container spacing={3} justifyContent="center" mt={5}>
           {images.map((img, idx) => (
             <Grid item xs={12} sm={6} md={4} key={idx}>
               <Card

@@ -30,8 +30,8 @@ const Header = () => {
     { label: 'البحث الأكاديمي', path: '/academic-search' },
     { label: 'المكتبة الإلكترونية', path: '/library' },
     { label: 'طلب الاعتماد', path: '/approval' },
-    { label: ' الكتب', path: '/approval' },
-    { label: ' المجلات العلمية', path: '/approval' },
+    { label: 'الكتب', path: '/approval' },
+    { label: 'معاملات جاهزة', path: '/ready-transactions' },
     { label: 'تواصل معنا', path: '/contact' },
   ];
 
@@ -135,7 +135,7 @@ const Header = () => {
                   color: 'inherit', 
                   mx: 1,
                   '&:hover': {
-                    backgroundColor: 'rgba(0, 0, 0, 0.04)'
+                    backgroundColor: theme.palette.action.hover
                   }
                 }}
               >
