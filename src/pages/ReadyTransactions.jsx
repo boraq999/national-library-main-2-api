@@ -48,11 +48,13 @@ const ReadyTransactions = () => {
 
         <MainTitle mainTitle={"المعاملات الجاهزة"} />
         <MainText mainText={"أدخل عنوان المعاملة الخاصة بك بدقة للبحث في قاعدة بيانات المكتبة الوطنية."} />
-        <Box component="form" onSubmit={handleSearch} sx={{ display: 'flex', gap: 2, mb: 4,mt:5, justifyContent: 'center' }}>
+        <Box component="form" onSubmit={handleSearch} sx={{ display: 'flex', gap: 2, mb: 4, justifyContent: 'center',pt:10,
+          flexDirection:{xs:'column',md:'row'},
+          }}>
           <TextField
             fullWidth
             variant="outlined"
-            placeholder="أدخل عنوان المعاملة...."
+            placeholder="اكتب عنوان الرسالة..."
             value={search}
             onChange={e => setSearch(e.target.value)}
             sx={{ background: theme.palette.background.paper, borderRadius: 2 }}
@@ -63,8 +65,16 @@ const ReadyTransactions = () => {
             color="primary"
             size="large"
             startIcon={<SearchIcon />}
-            disabled={loading || !search.trim() || search.length < 10}
-            sx={{ px: 4, fontWeight: 700, borderRadius: 2 }}
+            // disabled={loading || !search.trim() || search.length < 10}
+            disabled={loading || !search.trim()}
+            sx={{ px: 4, fontWeight: 700, borderRadius: 2,
+              // background: theme.palette.primary.main,
+              ...theme.btn1,
+              '&:hover':{
+                ...theme.btn1Hover,
+              }
+             }}
+
           >
             بحث
           </Button>

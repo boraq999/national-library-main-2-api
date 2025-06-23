@@ -27,7 +27,7 @@ const StatisticsSection = () => {
 
   const stats = [
     {
-      icon: <MenuBook fontSize="large" sx={{ color: theme.palette.line.main}} />,
+      icon: <MenuBook fontSize="large" sx={{ color: theme.palette.primary.main}} />,
       label: 'رسالة بحثية',
       count: counts.research,
       target: targetCounts.research
@@ -113,7 +113,7 @@ const StatisticsSection = () => {
                       <MainText mainText={stat.label} />
                     </Typography>
                     <Box sx={{ flexGrow: 1 }} />
-                    <Typography variant="h6" fontWeight={700}  sx={{...theme.subTitle}}>
+                    <Typography variant="h6" fontWeight={700}  color={theme.palette.primary.main}>
                       {stat.count.toLocaleString('ar')}+
                     </Typography>
                   </Box>
@@ -131,6 +131,7 @@ const StatisticsSection = () => {
                           width: `${(stat.count / stat.target) * 100}%`,
                           height: '100%',
                           background: theme.palette.line.main,
+                          background: theme.palette.primary.main,
                           transition: 'width 0.6s',
                         }}
                       />

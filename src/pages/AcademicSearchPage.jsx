@@ -1,6 +1,8 @@
 import { useState,useEffect } from 'react';
 import { Box, Container, Typography, TextField, Button, Grid, useTheme, Alert } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
+import MainTitle from '../components/MainTitle';
+import MainText from '../components/MainText';
 
 
 
@@ -41,15 +43,15 @@ const AcademicSearchPage = () => {
 
 
   return (
-    <Box sx={{ minHeight: '70vh',padding: '20px', display: 'flex', alignItems: 'center', justifyContent: 'center', background: theme.palette.background.default }}>
+    <Box sx={{ minHeight: '70vh',padding: '130px 20px 50px', display: 'flex', alignItems: 'center', justifyContent: 'center', background: theme.palette.background.default }}>
       <Container >
-        <Typography variant="h4" fontWeight={800} align="center" mt={8} mb={2} color={theme.palette.text.primary}>
-          ابحث عن عنوان رسالة بحثية
-        </Typography>
-        <Typography variant="body1" align="center" mb={4} color={theme.palette.text.secondary}>
-          أدخل عنوان الرسالة البحثية بدقة للبحث في قاعدة بيانات المكتبة الوطنية.
-        </Typography>
-        <Box component="form" onSubmit={handleSearch} sx={{ display: 'flex', gap: 2, mb: 4, justifyContent: 'center' }}>
+
+        <MainTitle mainTitle={'ابحث عن عنوان رسالة بحثية'} />
+        <MainText mainText={'أدخل عنوان الرسالة البحثية بدقة للبحث في قاعدة بيانات المكتبة الوطنية.'} />
+
+        <Box component="form" onSubmit={handleSearch} sx={{ display: 'flex', gap: 2, mb: 4, justifyContent: 'center',pt:10,
+          flexDirection:{xs:'column',md:'row'},
+          }}>
           <TextField
             fullWidth
             variant="outlined"
@@ -64,8 +66,16 @@ const AcademicSearchPage = () => {
             color="primary"
             size="large"
             startIcon={<SearchIcon />}
+            // disabled={loading || !search.trim() || search.length < 10}
             disabled={loading || !search.trim()}
-            sx={{ px: 4, fontWeight: 700, borderRadius: 2 }}
+            sx={{ px: 4, fontWeight: 700, borderRadius: 2,
+              // background: theme.palette.primary.main,
+              ...theme.btn1,
+              '&:hover':{
+                ...theme.btn1Hover,
+              }
+             }}
+
           >
             بحث
           </Button>

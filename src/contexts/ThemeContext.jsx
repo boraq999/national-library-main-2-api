@@ -57,6 +57,8 @@ export const ThemeContextProvider = ({ children }) => {
       },
       primary: {
         main: '#1a3a6e',
+        main: '#7925d2',
+        main: '#3fadda',
         light: '#2c4899',
         dark: '#111111',
       },
@@ -93,8 +95,8 @@ export const ThemeContextProvider = ({ children }) => {
       },
     },
     supTitle: {
-      color: '#1a3a6e',
-      backgroundImage: 'radial-gradient(circle, #1a3a6e, #9f1efa 50%, #4796ec 100%)',
+      color: '#3fadda',
+      backgroundImage: 'radial-gradient(circle, #1a3a6e, #3fadda 50%, #4796ec 100%)',
       backgroundClip: 'text',
       WebkitBackgroundClip: 'text',
       WebkitTextFillColor: 'transparent',
@@ -102,12 +104,28 @@ export const ThemeContextProvider = ({ children }) => {
     },
     title: {
       color: '#4828ce',
-      backgroundImage: 'radial-gradient(circle, #4828ce, #9f1efa 50%, #4796ec 100%)',
+      backgroundImage: 'radial-gradient(circle, #4828ce, #3fadda 80%, #4796ec 100%)',
       backgroundClip: 'text',
       WebkitBackgroundClip: 'text',
       WebkitTextFillColor: 'transparent',
       bg: 'transparent',
     },
+    // supTitle: {
+    //   color: '#1a3a6e',
+    //   backgroundImage: 'radial-gradient(circle, #1a3a6e, #9f1efa 50%, #4796ec 100%)',
+    //   backgroundClip: 'text',
+    //   WebkitBackgroundClip: 'text',
+    //   WebkitTextFillColor: 'transparent',
+    //   bg: 'transparent',
+    // },
+    // title: {
+    //   color: '#4828ce',
+    //   backgroundImage: 'radial-gradient(circle, #4828ce, #9f1efa 50%, #4796ec 100%)',
+    //   backgroundClip: 'text',
+    //   WebkitBackgroundClip: 'text',
+    //   WebkitTextFillColor: 'transparent',
+    //   bg: 'transparent',
+    // },
     subTitle: {
       color: '#1a3a6e',
       fontWeight: 600,
@@ -142,8 +160,14 @@ export const ThemeContextProvider = ({ children }) => {
       boxShadow: '0 8px 32px 0 rgba(26, 58, 110, 0.15)',
     },
     btn1:{
-      borderRadius:5,
-      color: '#dddddd',
+      borderRadius:2,
+      color: '#ffffff',
+      fontSize:'1.0rem',
+      padding:'8px 15px',
+
+    },
+    btn1Hover:{
+      background:'#1d4477',
     },
     components: {
       MuiCard: {
@@ -170,6 +194,7 @@ export const ThemeContextProvider = ({ children }) => {
       },
       primary: {
         main: '#1a3a6e',
+        main: '#d8cddf',
         light: '#2c4899',
         dark: '#111111',
       },
@@ -208,13 +233,22 @@ export const ThemeContextProvider = ({ children }) => {
     },
     supTitle: {
       color: '#1a3a6e',
-      color: '#dddddd',
-      backgroundImage: 'radial-gradient(circle, #dddddd, #9f1efa 50%, #4796ec 100%)',
+      color: '#3faddz',
+      backgroundImage: 'radial-gradient(circle, #dddddd, #3fadda 50%, #4796ec 100%)',
       backgroundClip: 'text',
       WebkitBackgroundClip: 'text',
       WebkitTextFillColor: 'transparent',
       bg: 'transparent',
     },
+    // supTitle: {
+    //   color: '#1a3a6e',
+    //   color: '#dddddd',
+    //   backgroundImage: 'radial-gradient(circle, #dddddd, #9f1efa 50%, #4796ec 100%)',
+    //   backgroundClip: 'text',
+    //   WebkitBackgroundClip: 'text',
+    //   WebkitTextFillColor: 'transparent',
+    //   bg: 'transparent',
+    // },
     title: {
       color: '#dddddd',
       backgroundImage: 'none',
@@ -258,8 +292,14 @@ export const ThemeContextProvider = ({ children }) => {
       boxShadow: '0 8px 32px 0 rgba(0, 0, 0, 0.3)',
     },
     btn1:{
-      borderRadius:5,
+      borderRadius:2,
       color: '#dddddd',
+      fontSize:'1.0rem',
+      padding:'8px 15px',
+      background:"#1d4477",
+    },
+    btn1Hover:{
+      background:'#1d4497',
     },
     components: {
       MuiCard: {

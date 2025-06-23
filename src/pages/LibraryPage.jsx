@@ -141,10 +141,10 @@ const LibraryPage = () => {
   return (
     <Container maxWidth={false}  sx={{ 
 
-      pt:10,
+      pt:15,
       px:{xs:2,md:10,lg:15},
       
-      ...theme.bgGrid2,
+      ...theme.bgGrid1,
       }}>
 
       <MainTitle mainTitle={"المكتبة الإلكترونية"} />

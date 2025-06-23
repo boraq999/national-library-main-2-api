@@ -2,6 +2,7 @@ import React from 'react';
 import { Box, Container, Typography, Button, useTheme } from '@mui/material';
 import { alpha } from '@mui/material/styles';
 import { Link } from 'react-router-dom';
+import BookmarkAddedIcon from '@mui/icons-material/BookmarkAdded';
 
 const LandingSection = () => {
     const theme = useTheme();
@@ -9,7 +10,7 @@ const LandingSection = () => {
     return (
         <Box
             sx={{
-                py: { xs: 8, md: 15 },
+                py: { xs: 14, md: 15 },
                 background: theme.palette.mode === 'light'
                     ? `linear-gradient(45deg, ${alpha(theme.palette.background.default, 0.1)}, ${alpha(theme.palette.background.paper, 0.915)})`
                     : `linear-gradient(45deg, ${alpha(theme.palette.background.paper, 0.991)}, ${alpha(theme.palette.background.default, 0.15)})`,
@@ -56,31 +57,7 @@ const LandingSection = () => {
                 </Box>
 
                 <Box sx={{ display: 'flex', gap: 2, justifyContent: 'center', mt: 4 }}>
-                    <Button
-                        component={Link}
-                        to="/academic-search"
-                        variant="contained"
-                        sx={{
-                            backgroundColor: theme.palette.primary.main,
-                            color: theme.palette.common.white,
-                            '&:hover': {
-                                backgroundColor: theme.palette.primary.dark,
-                                transform: 'scale(1.05)',
-                            },
-                            display: 'flex',
-                            alignItems: 'center',
-                            gap: 1,
-                            textDecoration: 'none',
-                            padding: '7px 20px',
-                            borderRadius: '25px',
-                            fontSize: '15px',
-                            fontWeight: 600,
-                            transition: 'background-color 0.3s ease, transform 0.3s ease',
-                        }}
-                    >
-                        <span>اطلع على العناوين</span>
-                        <Box component="img" src="/v1_assets/audit-1.png" alt="file" sx={{ width: 25 }} />
-                    </Button>
+
                     <Button
                         component={Link}
                         to="/library"
@@ -88,7 +65,7 @@ const LandingSection = () => {
                         sx={{
                             border: `2px solid ${theme.palette.primary.main}`,
                             background: 'transparent',
-                            color: theme.palette.text.primary,
+                            color: theme.palette.primary.main,
                             '&:hover': {
                                 backgroundColor: alpha(theme.palette.primary.main, 0.1),
                                 color: theme.palette.primary.main,
@@ -102,17 +79,26 @@ const LandingSection = () => {
                             borderRadius: '25px',
                             fontSize: '15px',
                             fontWeight: 600,
+                            ...theme.title,
+                            backdropFilter:'blur(5px)',
+                            filter: 'drop-shadow(0px 0px 5px rgba(168, 163, 163, 0.95))',
                             transition: 'background-color 0.3s ease, transform 0.3s ease',
                         }}
                     >
-                        <span>اطلع على الرسائل</span>
-                        <Box component="img" src="/v1_assets/book.png" alt="book" sx={{ width: 25 }} />
+                        <span>معاملات جاهزة</span>
+                        <BookmarkAddedIcon sx={{
+                            color:'#000000',
+                            ...theme.supTitle,
+                            }}/>
+                        {/* <Box component="img" src="/v1_assets/book.png" alt="book" sx={{ width: 25 }} /> */}
                     </Button>
                 </Box>
 
                 <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', mt: 8, gap: 7 }}>
                     <Box component="img" src="/v1_assets/banner/banner-1-Photoroom (1).png" alt="banner-1" sx={{ width: 140 }} />
-                    <Box component="img" src="/v1_assets/banner/banner-2-Photoroom.png" alt="banner-2" sx={{ width: 170 }} />
+                    <Box component="img" src="/v1_assets/banner/banner-2-Photoroom.png" alt="banner-2" sx={{ width: 170 ,
+                        filter: 'brightness(1.8) contrast(1.5) invert(0.1)',
+                    }} />
                 </Box>
             </Container>
             <Box

@@ -73,49 +73,7 @@ const CtaSection = () => {
               استفد من خدماتنا المتكاملة للتحقق من تفرد عنوانك البحثي، واستعراض الرسائل السابقة، وطلب الاعتماد الرسمي لرسالتك العلمية.
             </Typography>
             
-            <Box sx={{ display: 'flex', gap: 2, justifyContent: 'center' }}>
-              <Button
-                component={Link}
-                to="/search"
-                variant="contained"
-                color="secondary"
-                size="large"
-                endIcon={<ArrowBack />}
-                sx={{
-                  py: 1.5,
-                  px: 4,
-                  fontWeight: 600,
-                  boxShadow: theme.shadows[4],
-                  backgroundColor: theme.palette.primary.main,
-                  ...theme.btn1,
-                  '&:hover': {
-                    backgroundColor: theme.palette.primary.light,
-                  }
-                }}
-              >
-                ابدأ البحث الآن
-              </Button>
-              
-              <Button
-                component={Link}
-                to="/contact"
-                variant="outlined"
-                size="large"
-                 sx={{
-                  py: 1.5,
-                  px: 4,
-                  fontWeight: 600,
-                  boxShadow: theme.shadows[4],
-                  backgroundColor: theme.palette.primary.main,
-                  ...theme.btn1,
-                  '&:hover': {
-                    backgroundColor: theme.palette.primary.light,
-                  }
-                }}
-              >
-                تواصل معنا
-              </Button>
-            </Box>
+ 
           </Box>
         </Paper>
       </Container>
