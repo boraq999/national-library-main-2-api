@@ -18,6 +18,7 @@ import {
 } from '@mui/material';
 import { Menu as MenuIcon, DarkMode, LightMode } from '@mui/icons-material';
 import { ColorModeContext } from '../../contexts/ThemeContext';
+import MainTitle from '../MainTitle';
 
 const Header = () => {
   const theme = useTheme();
@@ -29,9 +30,9 @@ const Header = () => {
     { label: 'الرئيسية', path: '/' },
     { label: 'البحث الأكاديمي', path: '/academic-search' },
     { label: 'المكتبة الإلكترونية', path: '/library' },
+    { label: 'معاملات جاهزة', path: '/ready-transactions' },
+    { label: 'الكتب', path: '/approval' },
     { label: 'طلب الاعتماد', path: '/approval' },
-    { label: ' الكتب', path: '/approval' },
-    { label: ' المجلات العلمية', path: '/approval' },
     { label: 'تواصل معنا', path: '/contact' },
   ];
 
@@ -40,10 +41,9 @@ const Header = () => {
   };
 
   const drawer = (
-    <Box onClick={toggleDrawer} sx={{ textAlign: 'center', width: 250 }}>
-      <Typography variant="h6" sx={{ my: 2, fontWeight: 700 }}>
-        المكتبة الوطنية
-      </Typography>
+    <Box onClick={toggleDrawer} sx={{ textAlign: 'center', width: 250 ,py:5}}>
+
+      <MainTitle mainTitle={'المكتبة الوطنية'} />
       <List>
         {navItems.map((item) => (
           <ListItem key={item.label} disablePadding>
@@ -83,21 +83,32 @@ const Header = () => {
     >
       <Container maxWidth="lg">
         <Toolbar disableGutters>
+
           <Typography
             variant="h6"
             component={Link}
             to="/"
             sx={{
               mr: 2,
-              display: { xs: 'none', sm: 'flex' },
+              display: { xs: 'none' },
               fontWeight: 700,
               color: 'inherit',
               textDecoration: 'none',
               flexGrow: isMobile ? 0 : 1
             }}
-          >
-            المكتبة الوطنية
+            >
+            المكتبة المركزية0000
           </Typography>
+          <Box sx={{
+            display: { xs: 'none', sm: 'flex' },
+            alignItems:'center',
+            justifyContent:'center',
+            flexGrow: isMobile ? 0 : 1,
+            pt:1,
+            }}>
+            <MainTitle mainTitle={'المكتب المركزية'} />
+          </Box>
+
 
           <Box sx={{ display: { xs: 'flex', md: 'none' }, flexGrow: 1 }}>
             <IconButton
@@ -122,8 +133,10 @@ const Header = () => {
               textDecoration: 'none',
             }}
           >
-            المكتبة الوطنية
+            المكتبة المركزية
           </Typography>
+
+
 
           <Box sx={{ display: { xs: 'none', md: 'flex' }, ml: 2 }}>
             {navItems.map((item) => (
@@ -135,7 +148,7 @@ const Header = () => {
                   color: 'inherit', 
                   mx: 1,
                   '&:hover': {
-                    backgroundColor: 'rgba(0, 0, 0, 0.04)'
+                    backgroundColor: theme.palette.action.hover
                   }
                 }}
               >
