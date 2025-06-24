@@ -101,7 +101,7 @@ const FacilitiesSection = () => {
       sx={{ 
         py: { xs: 8, md: 10 },
         background: theme.palette.bg1.main, 
-        ...theme.bgGrid2,   
+        // ...theme.bgGrid1,   
 
       }}
     >

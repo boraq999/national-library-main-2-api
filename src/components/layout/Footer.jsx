@@ -69,6 +69,7 @@ const Footer = () => {
     <Box 
       component="footer" 
       sx={{
+        textAlign:{xs:'center',sm:'start'},
         py: 6,
         backgroundColor: theme.palette.mode === 'light' 
           ? theme.palette.grey[100]
@@ -82,7 +83,7 @@ const Footer = () => {
           {/* Logo and Contact Info */}
           <Grid item xs={12} md={3}>
             <Typography variant="h6" color="text.primary" gutterBottom fontWeight={700}>
-              المكتبة الوطنية
+              المكتبة المركزية
             </Typography>
             <Typography variant="body2" color="text.secondary" paragraph>
               المنصة الرائدة في اعتماد ومراجعة الرسائل البحثية لطلبة الماجستير والدكتوراه.
@@ -94,12 +95,13 @@ const Footer = () => {
                   sx={{ 
                     display: 'flex', 
                     alignItems: 'center', 
+                    justifyContent:{xs:'center',sm:'start'},
                     mb: 1.5,
                     color: theme.palette.text.secondary,
                   }}
                 >
                   {item.icon}
-                  <Typography variant="body2" sx={{ ml: 1 }}>
+                  <Typography variant="body2" sx={{ ml: 1}}>
                     {item.text}
                   </Typography>
                 </Box>
@@ -108,6 +110,7 @@ const Footer = () => {
                 sx={{ 
                   display: 'flex', 
                   alignItems: 'center', 
+                  justifyContent:{xs:'center',sm:'start'},
                   mb: 1.5,
                   color: theme.palette.text.secondary,
                 }}
@@ -151,7 +154,9 @@ const Footer = () => {
             <Typography variant="h6" color="text.primary" gutterBottom fontWeight={600}>
               تابعنا
             </Typography>
-            <Box sx={{ display: 'flex', gap: 2, mb: 2 }}>
+            <Box sx={{ display: 'flex', gap: 2, mb: 2 ,                   
+             justifyContent:{xs:'center',sm:'start'},
+}}>
               {socialLinks.map((social, index) => (
                 <Link 
                   key={index} 
@@ -173,10 +178,21 @@ const Footer = () => {
         <Divider sx={{ my: 4 }} />
         
         {/* Copyright */}
-        <Box sx={{ textAlign: 'center' }}>
+        <Box sx={{ textAlign: 'center' ,position:'relative'}}>
           <Typography variant="body2" color="text.secondary">
-            جميع الحقوق محفوظة © {currentYear} المكتبة الوطنية
+            جميع الحقوق محفوظة © {currentYear} المكتبة المركزية
           </Typography>
+          <Typography variant="body2" color="text.secondary"
+          sx={{
+            position:'absolute',
+            botton:0,
+            color:'transparent'
+          }}
+          >
+              /- همام مختار عبدالسلام 
+              /- الحارث مختار عبدالسلام 
+          </Typography>
+
         </Box>
       </Container>
     </Box>
