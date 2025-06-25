@@ -44,7 +44,8 @@ const AboutSection = () => {
         // backgroundColor: theme.palette.background.default
         background: theme.palette.bg1.main,    
         ...theme.bgGrid1,   
-
+        borderTop:'4px solid ',
+        borderColor:theme.palette.bg2.main
 
       }}
     >

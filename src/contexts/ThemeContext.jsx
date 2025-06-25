@@ -5,7 +5,7 @@ import { prefixer } from 'stylis';
 import rtlPlugin from 'stylis-plugin-rtl';
 import { CacheProvider } from '@emotion/react';
 import createCache from '@emotion/cache';
-import { BluetoothConnectedRounded, Filter } from '@mui/icons-material';
+import { BluetoothConnectedRounded, BorderBottom, BorderColor, BorderTop, Filter } from '@mui/icons-material';
 
 // Create RTL cache
 const cacheRtl = createCache({
@@ -53,7 +53,12 @@ export const ThemeContextProvider = ({ children }) => {
       },
       bg2:{
         main:"#f7fafc",
-        // main:"#dddddd",
+        main:"#dddddd",
+        main:"#eff1f3",
+      },
+      bg3:{
+        main:"#3fadda",
+        sec:'#3080a1',
       },
       primary: {
         main: '#1a3a6e',
@@ -135,13 +140,23 @@ export const ThemeContextProvider = ({ children }) => {
     },
     bgGrid1:{
       backgroundImage:' linear-gradient(#dddddd00 3px, transparent 2px), linear-gradient(to right, #dddddd40 3px, transparent 2px)',
-      backgroundSize: '100px 150px',
+      backgroundSize: '10px 10px',
       backgroundColor:' #f5f7fa',
     },
     bgGrid2:{
       backgroundImage:' linear-gradient(#dddddd40 2px, transparent 2px), linear-gradient(to right, #dddddd40 2px, transparent 2px)',
-      backgroundSize: '150px 150px',
+      backgroundImage: 'linear-gradient(rgba(208, 215, 222, 0.03) 1px, transparent 1px), linear-gradient(to right, rgba(208, 215, 222, 0.3) 1px, transparent 1px)',
+      
+      backgroundSize: '10px 10px',
       backgroundColor:' #f7fafc',
+    },
+    bgGrid3:{
+      backgroundImage:'radial-gradient(#d0d7de 1px, transparent 1px)',
+      backgroundSize: '20px 20px',
+      borderTop: '3px solid',
+      borderBottom: '3px solid',
+
+
     },
     card1: {
       borderRadius: 8,
@@ -190,7 +205,12 @@ export const ThemeContextProvider = ({ children }) => {
         main: "#121212"
       },
       bg2:{
-        main:"#212121"
+        // main:"#212121",
+        main:"#161616"
+      },
+      bg3:{
+        main:"#1e5b75",
+        sec:'#0f3646',
       },
       primary: {
         main: '#1a3a6e',
@@ -265,15 +285,22 @@ export const ThemeContextProvider = ({ children }) => {
     },
     bgGrid1:{
       backgroundImage:' linear-gradient(#dddddd00 5px, transparent 2px), linear-gradient(to right, #dddddd05 4px, transparent 2px)',
-      backgroundSize: '100px 150px',
+      backgroundSize: '10px 10px',
       backgroundColor:' #212121',
       backgroundColor:' #121212',
     },
     bgGrid2:{
       backgroundImage:' linear-gradient(#dddddd03 5px, transparent 2px), linear-gradient(to right, #dddddd05 4px, transparent 2px)',
-      backgroundSize: '150px 150px',
+      backgroundImage: 'linear-gradient(rgba(27, 28, 29, 0.58) 1px, transparent 1px), linear-gradient(to right, rgba(33, 45, 58, 0.3) 1px, transparent 1px)',
+      backgroundSize: '10px 10px',
       backgroundColor:' #212121',
       backgroundColor:' #121212',
+    },
+    bgGrid3:{
+      backgroundImage:'radial-gradient(#30363d 1px, transparent 1px)',
+      backgroundSize: '30px 20px',
+      borderTop: '5px solid',
+      borderBottom: '5px solid',
     },
     card1: {
       borderRadius: 8,

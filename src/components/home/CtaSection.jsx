@@ -7,7 +7,12 @@ const CtaSection = () => {
   const theme = useTheme();
 
   return (
-    <Box sx={{ py: { xs: 8, md: 10 } }}>
+    <Box sx={{ py: { xs: 8, md: 10 ,
+              background: theme.palette.bg1.main, 
+        ...theme.bgGrid3,  
+        borderColor:theme.palette.bg2.main, 
+        backgroundColor: theme.palette.bg1.main,   
+    } }}>
       <Container maxWidth="lg">
         <Paper
           elevation={0}

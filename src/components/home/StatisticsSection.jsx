@@ -84,8 +84,11 @@ const StatisticsSection = () => {
       sx={{
         py: { xs: 6, md: 8 },
       
-        background: theme.palette.bg2.main,    
-        ...theme.bgGrid2,   
+        // borderTop:'3px solid', 
+        // borderBottom:'3px solid',
+        ...theme.bgGrid3,   
+        borderColor:theme.palette.bg2.main, 
+        backgroundColor: theme.palette.bg1.main,   
 
 
       }}

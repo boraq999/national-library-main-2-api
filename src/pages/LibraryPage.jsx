@@ -320,8 +320,10 @@ const LibraryPage = () => {
                   <Grid item xs={12} sm={6}>
                     <Button
                       variant="contained"
-                      color="primary"
+                      // color="primary"
+                      // color="#111111"
                       sx={{
+                        background:theme.palette.bg3.main,
                         fontSize: 13,
                         borderRadius: 2,
                         minWidth: 100,
@@ -335,6 +337,9 @@ const LibraryPage = () => {
                         display: 'flex',
                         flexDirection: 'row-reverse',
                         alignItems: 'center',
+                        '&:hover':{
+                        background:theme.palette.bg3.sec,
+                        }
                       }}
                       href={item.pdf_path ? `https://alalem.c-library.org${item.pdf_path.replace('/home/c-library-alalem/htdocs/alalem.c-library.org/storage/app/public','/storage')}` : undefined}
                       target="_blank"

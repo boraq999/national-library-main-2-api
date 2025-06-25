@@ -1,5 +1,5 @@
 import { useState, useContext, Children } from 'react';
-import { Link } from 'react-router-dom';
+import { Link,useLocation } from 'react-router-dom';
 import { 
   AppBar, 
   Box, 
@@ -17,7 +17,7 @@ import {
   useMediaQuery,
   useTheme,
   Divider,
-  Avatar
+  Avatar,
 } from '@mui/material';
 import { 
   Menu as MenuIcon, 
@@ -29,7 +29,8 @@ import {
   Assignment,
   Book,
   Approval,
-  ContactMail
+  ContactMail,
+  GitHub
 } from '@mui/icons-material';
 import { ColorModeContext } from '../../contexts/ThemeContext';
 import MainTitle from '../MainTitle';
@@ -38,8 +39,10 @@ import MainText from '../MainText';
 const Header = () => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
-  const { toggleColorMode, mode } = useContext(ColorModeContext);
+  const colorModeContext = useContext(ColorModeContext);
+  const { toggleColorMode, mode } = colorModeContext || { toggleColorMode: () => {}, mode: 'light' };
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const location = useLocation();
 
   const navItems = [
     { label: 'الرئيسية', path: '/', icon: <Home /> },
@@ -55,19 +58,17 @@ const Header = () => {
     setDrawerOpen(!drawerOpen);
   };
 
+  const isActive = (path) => {
+    return location.pathname === path;
+  };
+
   const drawer = (
     <Box 
       sx={{ 
         width: 280,
         height: '100%',
-        background: theme.palette.mode === 'light' 
-          // ? 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)'
-          // : 'linear-gradient(135deg, #2c3e50 0%, #34495e 100%)',
-          ? 'linear-gradient(135deg,rgba(36, 47, 99, 0.3) 0%,rgba(38, 32, 44, 0.45) 100%)'
-          : 'linear-gradient(135deg,rgba(44, 62, 80, 0) 0%,rgba(52, 73, 94, 0) 100%)',
-        color: '#fff',
+        backgroundColor: theme.palette.background.paper,
         position: 'relative',
-        // backdropFilter: 'blur(10px)',
         overflow: 'hidden'
       }}
     >
@@ -76,121 +77,103 @@ const Header = () => {
         textAlign: 'center', 
         py: 4,
         position: 'relative',
-        '&::before': {
-          content: '""',
-          position: 'absolute',
-          top: 0,
-          left: 0,
-          right: 0,
-          bottom: 0,
-          background: 'rgba(255,255,255,0.1)',
-          backdropFilter: 'blur(10px)'
-        }
+        backgroundColor: theme.palette.mode === 'light' 
+          ? 'rgba(9, 105, 218, 0.05)'
+          : 'rgba(88, 166, 255, 0.05)',
+        borderBottom: `1px solid ${theme.palette.divider}`
       }}>
         <Avatar sx={{ 
           width: 60, 
           height: 60, 
           mx: 'auto', 
           mb: 2,
-          background: 'rgba(255,255,255,0.2)',
-          fontSize: '2rem'
+          backgroundColor: theme.palette.primary.main
         }}>
-          📚
+          <GitHub sx={{ fontSize: 30 }} />
         </Avatar>
         <Typography variant="h6" sx={{ 
           fontWeight: 700,
-          textShadow: '0 2px 4px rgba(0,0,0,0.3)',
-          position: 'relative',
-          zIndex: 1
+          color: theme.palette.text.primary
         }}>
           المكتبة المركزية
         </Typography>
       </Box>
       
-      <Divider sx={{ borderColor: 'rgba(255,255,255,0.52)', mx: 2 }} />
-      
       {/* Navigation Items */}
-      <List sx={{ px: 1, mt: 2 }}>
-        {navItems.map((item, index) => (
-          <ListItem key={item.label} disablePadding sx={{ mb: 1 }}>
-            <ListItemButton 
-              component={Link}
-              to={item.path}
-              onClick={toggleDrawer}
-              sx={{ 
-                borderRadius: '15px',
-                mx: 1,
-                transition: 'all 0.3s ease',
-                position: 'relative',
-                overflow: 'hidden',
-                '&:hover': {
-                  backgroundColor: 'rgba(255,255,255,0.2)',
-                  transform: 'translateX(-5px)',
-                  boxShadow: '0 4px 15px rgba(0,0,0,0.2)'
-                },
-                '&::before': {
-                  content: '""',
-                  position: 'absolute',
-                  left: 0,
-                  top: 0,
-                  height: '100%',
-                  width: '4px',
-                  background: '#fff',
-                  transform: 'scaleY(0)',
-                  transition: 'transform 0.3s ease',
-                  transformOrigin: 'bottom'
-                },
-                '&:hover::before': {
-                  transform: 'scaleY(1)'
-                }
-              }}
-            >
-              <ListItemIcon sx={{ 
-                color: '#fff',
-                minWidth: '45px',
-                '& .MuiSvgIcon-root': {
-                  fontSize: '1.3rem',
-                  filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.53))'
-                }
-              }}>
-                {item.icon}
-              </ListItemIcon>
-              <ListItemText 
-                primary={item.label}
-                sx={{
-                  '& .MuiTypography-root': {
-                    fontWeight: 500,
-                    fontSize: '0.95rem',
-                    textShadow: '0 1px 2px rgba(0,0,0,0.53)'
-                  }
+      <List sx={{ px: 2, py: 2 }}>
+        {navItems.map((item) => {
+          const active = isActive(item.path);
+          
+          return (
+            <ListItem key={item.label} disablePadding sx={{ mb: 1 }}>
+              <ListItemButton 
+                component={Link}
+                to={item.path}
+                onClick={toggleDrawer}
+                selected={active}
+                sx={{ 
+                  borderRadius: 1,
+                  transition: 'all 0.2s ease',
+                  position: 'relative',
+                  overflow: 'hidden',
+                  py: 1.5,
+                  ...(active && {
+                    backgroundColor: theme.palette.mode === 'light' 
+                      ? 'rgba(9, 105, 218, 0.08)'
+                      : 'rgba(88, 166, 255, 0.08)',
+                    '&::before': {
+                      content: '""',
+                      position: 'absolute',
+                      right: 0,
+                      top: '50%',
+                      transform: 'translateY(-50%)',
+                      height: '60%',
+                      width: '3px',
+                      backgroundColor: theme.palette.primary.main,
+                      borderRadius: '4px',
+                    }
+                  })
                 }}
-              />
-            </ListItemButton>
-          </ListItem>
-        ))}
+              >
+                <ListItemIcon sx={{ 
+                  color: active ? theme.palette.primary.main : theme.palette.text.secondary,
+                  minWidth: '40px'
+                }}>
+                  {item.icon}
+                </ListItemIcon>
+                <ListItemText 
+                  primary={item.label}
+                  primaryTypographyProps={{
+                    fontWeight: active ? 600 : 500,
+                    color: active ? theme.palette.primary.main : theme.palette.text.primary
+                  }}
+                />
+              </ListItemButton>
+            </ListItem>
+          );
+        })}
       </List>
       
-      {/* Decorative Elements */}
-      <Box sx={{
-        position: 'absolute',
-        bottom: -50,
-        right: -50,
-        width: 150,
-        height: 150,
-        borderRadius: '50%',
-        background: 'rgba(255,255,255,0.05)',
-        zIndex: 0
-      }} />
-      <Box sx={{
-        position: 'absolute',
-        top: -30,
-        left: -30,
-        width: 100,
-        height: 100,
-        borderRadius: '50%',
-        background: 'rgba(255,255,255,0.08)',
-        zIndex: 0
-      }} />
+      {/* Footer */}
+      <Box sx={{ 
+        position: 'absolute', 
+        bottom: 0, 
+        left: 0, 
+        right: 0, 
+        p: 2, 
+        borderTop: `1px solid ${theme.palette.divider}`,
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center'
+      }}>
+        <IconButton onClick={toggleColorMode} size="small">
+          {mode === 'dark' ? <LightMode /> : <DarkMode />}
+        </IconButton>
+        
+        <Typography variant="caption" color="text.secondary">
+          الإصدار 2.0.0
+        </Typography>
+      </Box>
     </Box>
   );
 
