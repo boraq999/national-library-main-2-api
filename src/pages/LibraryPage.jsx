@@ -228,8 +228,14 @@ const LibraryPage = () => {
         <Box sx={{ display: 'flex', flexDirection: 'row', gap: 2, justifyContent: { xs: 'center', sm: 'flex-end' }, width: '100%' }}>
           <Button
             variant="contained"
-            color="primary"
-            sx={{ minWidth: 120, fontWeight: 700, height: 56, alignSelf: 'center' }}
+            // color="primary"
+            sx={{ minWidth: 120, fontWeight: 700, height: 56, alignSelf: 'center',
+              color:'white',
+              backgroundColor:theme.palette.bg3.main,
+              '&:hover':{
+                  background:theme.palette.bg3.sec,
+                  }
+             }}
             onClick={handleSearch}
             disabled={!isSearchEnabled}
           >
