@@ -30,8 +30,9 @@ import {
   Book,
   Approval,
   ContactMail,
-  GitHub
+  GitHub,
 } from '@mui/icons-material';
+import SchoolIcon from '@mui/icons-material/School';
 import { ColorModeContext } from '../../contexts/ThemeContext';
 import MainTitle from '../MainTitle';
 import MainText from '../MainText';
@@ -87,9 +88,14 @@ const Header = () => {
           height: 60, 
           mx: 'auto', 
           mb: 2,
-          backgroundColor: theme.palette.primary.main
+          backgroundColor: theme.palette.bg2.main
         }}>
-          <GitHub sx={{ fontSize: 30 }} />
+          <SchoolIcon 
+          sx={{ 
+            fontSize: 30,
+            color: theme.palette.bg3.main
+
+           }} />
         </Avatar>
         <Typography variant="h6" sx={{ 
           fontWeight: 700,
@@ -211,15 +217,31 @@ const Header = () => {
             المكتبة المركزية
           </Typography>
 
-          <Box sx={{
-            display: { xs: 'none', md: 'flex' },
-            alignItems:'center',
-            justifyContent:'center',
-            flexGrow: isMobile ? 0 : 1,
-            pt:1,
-            }}>
+          <Box
+
+            sx={{
+              display: { xs: 'none', md: 'flex' },
+              alignItems:'center',
+              justifyContent:'center',
+              flexGrow: isMobile ? 0 : 1,
+              pt:1,
+              }}>
               {/* show desktop */}
-            <MainTitle mainTitle={'المكتب المركزية'} fSize='1.5rem'/>
+              <Box
+                component={Link}
+                to="/" 
+                sx={{
+                  textDecoration:'none',
+                }}
+              >
+                <Typography
+                  sx={{
+                    color:'yellow',
+                    display:'none'
+                  }}
+                >/- همام مختار عبدالسلام /- الحارث مختار عبدالسلام</Typography>
+                <MainTitle mainTitle={'المكتب المركزية'} fSize='1.5rem'/>
+              </Box>
           </Box>
 
 
