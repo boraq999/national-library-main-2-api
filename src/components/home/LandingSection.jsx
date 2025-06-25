@@ -60,7 +60,7 @@ const LandingSection = () => {
 
                     <Button
                         component={Link}
-                        to="/library"
+                        to="/ready-transactions"
                         variant="outlined"
                         sx={{
                             border: `2px solid ${theme.palette.primary.main}`,

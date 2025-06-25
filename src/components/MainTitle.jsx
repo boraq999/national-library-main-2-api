@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import { useTheme } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
 
-const MainTitle = ({ mainTitle }) => {
+const MainTitle = ({ mainTitle,fSize='2rem' }) => {
   const theme = useTheme();
   return (
            <Typography 
@@ -14,6 +14,7 @@ const MainTitle = ({ mainTitle }) => {
               mb: 2,
               fontWeight: 700,
               ...theme.supTitle,
+              fontSize:fSize,
               textAlign:'center'
             }}
           >

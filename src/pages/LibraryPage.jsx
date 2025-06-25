@@ -13,6 +13,7 @@ import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
 import Autocomplete from '@mui/material/Autocomplete';
 import MainTitle from '../components/MainTitle';
 import MainText from '../components/MainText';
+import { API_BASE_URL, BASE_DOMAIN, endpoints } from '../api/config';
 
 const LibraryPage = () => {
   const theme = useTheme();
@@ -40,7 +41,7 @@ const LibraryPage = () => {
       setLoading(true);
       setError(null);
       try {
-        const res = await fetch('https://alalem.c-library.org/api/theses/latest');
+        const res = await fetch(endpoints.latestTheses);
         if (!res.ok) throw new Error('network');
         const data = await res.json();
         if (isMounted) setLatestData(Array.isArray(data) ? data : []);
@@ -57,13 +58,13 @@ const LibraryPage = () => {
 
   // جلب بيانات الفلاتر
   useEffect(() => {
-    fetch('https://alalem.c-library.org/api/universities')
+    fetch(endpoints.universities)
       .then(res => res.json())
       .then(data => setUniversities(Array.isArray(data) ? data : []));
-    fetch('https://alalem.c-library.org/api/specializations')
+    fetch(endpoints.specializations)
       .then(res => res.json())
       .then(data => setSpecializations(Array.isArray(data) ? data : []));
-    fetch('https://alalem.c-library.org/api/degrees')
+    fetch(endpoints.degrees)
       .then(res => res.json())
       .then(data => setDegrees(Array.isArray(data) ? data : []));
   }, []);
@@ -97,7 +98,7 @@ const LibraryPage = () => {
       }
     }
     try {
-      const res = await fetch(`https://alalem.c-library.org/api/theses/search?${params.toString()}`);
+      const res = await fetch(`${endpoints.searchTheses}?${params.toString()}`);
       if (!res.ok) throw new Error('network');
       const data = await res.json();
       setLatestData(Array.isArray(data) ? data : []);
@@ -121,7 +122,7 @@ const LibraryPage = () => {
     setLoading(true);
     setError(null);
     try {
-      const res = await fetch('https://alalem.c-library.org/api/theses/latest');
+      const res = await fetch(endpoints.latestTheses);
       if (!res.ok) throw new Error('network');
       const data = await res.json();
       setLatestData(Array.isArray(data) ? data : []);
@@ -227,8 +228,14 @@ const LibraryPage = () => {
         <Box sx={{ display: 'flex', flexDirection: 'row', gap: 2, justifyContent: { xs: 'center', sm: 'flex-end' }, width: '100%' }}>
           <Button
             variant="contained"
-            color="primary"
-            sx={{ minWidth: 120, fontWeight: 700, height: 56, alignSelf: 'center' }}
+            // color="primary"
+            sx={{ minWidth: 120, fontWeight: 700, height: 56, alignSelf: 'center',
+              color:'white',
+              backgroundColor:theme.palette.bg3.main,
+              '&:hover':{
+                  background:theme.palette.bg3.sec,
+                  }
+             }}
             onClick={handleSearch}
             disabled={!isSearchEnabled}
           >
@@ -265,7 +272,14 @@ const LibraryPage = () => {
             </Typography>
           </Grid>
         ) : (
-          results.map(item => (
+          <>
+            <Grid item xs={12}>
+              <Typography variant="subtitle1" sx={{ mb: 2, textAlign: 'right', fontWeight: 600, color: theme.palette.primary.main }}>
+                تم العثور على 
+                <span style={{ backgroundColor: '#33d13df9', padding: '4px 7px', borderRadius: '5px', border:'1px solid yellow', color:'#fff'}}>{results.length}</span> نتيجة
+              </Typography>
+            </Grid>
+            {results.map(item => (
             <Grid item xs={12} md={6} key={item.id}>
               <Box
                 sx={{
@@ -320,8 +334,10 @@ const LibraryPage = () => {
                   <Grid item xs={12} sm={6}>
                     <Button
                       variant="contained"
-                      color="primary"
+                      // color="primary"
+                      // color="#111111"
                       sx={{
+                        background:theme.palette.bg3.main,
                         fontSize: 13,
                         borderRadius: 2,
                         minWidth: 100,
@@ -335,8 +351,11 @@ const LibraryPage = () => {
                         display: 'flex',
                         flexDirection: 'row-reverse',
                         alignItems: 'center',
+                        '&:hover':{
+                        background:theme.palette.bg3.sec,
+                        }
                       }}
-                      href={item.pdf_path ? `https://alalem.c-library.org${item.pdf_path.replace('/home/c-library-alalem/htdocs/alalem.c-library.org/storage/app/public','/storage')}` : undefined}
+                      href={item.pdf_path ? `${BASE_DOMAIN}${item.pdf_path.replace('/home/c-library-alalem/htdocs/alalem.c-library.org/storage/app/public','/storage')}` : undefined}
                       target="_blank"
                       rel="noopener noreferrer"
                       disabled={!item.pdf_path}
@@ -348,7 +367,8 @@ const LibraryPage = () => {
                 </Grid>
               </Box>
             </Grid>
-          ))
+          ))}
+          </>
         )}
       </Grid>
     </Container>

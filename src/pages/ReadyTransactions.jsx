@@ -1,8 +1,10 @@
-import { useState,useEffect } from 'react';
-import { Box, Container, Typography, TextField, Button, Grid, useTheme, Alert } from '@mui/material';
+import { useState, useMemo } from 'react';
+import { Box, Container, Typography, TextField, Button, useTheme, Alert, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, IconButton } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
+import ClearIcon from '@mui/icons-material/Clear';
 import MainTitle from '../components/MainTitle';
 import MainText from '../components/MainText';
+import { API_BASE_URL } from '../api/config';
 
 
 
@@ -21,7 +23,7 @@ const ReadyTransactions = () => {
     setNotFound(false);
     try {
       const encodedSearchQuery = encodeURIComponent(search);
-      const apiUrl = `https://alalem.c-library.org/api/reserved-thesis-titles-search-guests?q=${encodedSearchQuery}`;
+      const apiUrl = `${API_BASE_URL}/reserved-thesis-titles-search-person-guests?q=${encodedSearchQuery}`;
       
       const res = await fetch(apiUrl);
       const data = await res.json();
@@ -39,83 +41,121 @@ const ReadyTransactions = () => {
     }
   };
 
+  const handleClear = () => {
+    setSearch('');
+    setResult(null);
+    setNotFound(false);
+  };
+
+  // Function to highlight the search term in text
+  const highlightSearchTerm = (text, searchTerm) => {
+    if (!text || !searchTerm.trim()) return text;
+    
+    const regex = new RegExp(`(${searchTerm.trim()})`, 'gi');
+    const parts = text.split(regex);
+    
+    return parts.map((part, i) => 
+      regex.test(part) ? 
+        <span key={i} style={{ backgroundColor: '#33d13d99', padding: '3px 7px', borderRadius: '5px',border:'1px solid yellow' }}>{part}</span> : 
+        part
+    );
+  };
+
   
 
 
   return (
-    <Box sx={{ minHeight: '70vh',padding: '20px', display: 'flex', alignItems: 'center', justifyContent: 'center', background: theme.palette.background.default }}>
+    <Box sx={{ 
+    minHeight: '80vh',
+    display: 'flex', 
+    alignItems: 'center', 
+    justifyContent: 'center',
+    py:15,
+
+    px:{xs:1,md:10,lg:15},
+      ...theme.bgGrid1,
+
+     }}>
       <Container >
 
         <MainTitle mainTitle={"المعاملات الجاهزة"} />
-        <MainText mainText={"أدخل عنوان المعاملة الخاصة بك بدقة للبحث في قاعدة بيانات المكتبة الوطنية."} />
+        <MainText mainText={"أدخل اسم الباحث للبحث في قاعدة بيانات المكتبة الوطنية."} />
         <Box component="form" onSubmit={handleSearch} sx={{ display: 'flex', gap: 2, mb: 4, justifyContent: 'center',pt:10,
           flexDirection:{xs:'column',md:'row'},
           }}>
           <TextField
             fullWidth
             variant="outlined"
-            placeholder="اكتب عنوان الرسالة..."
+            placeholder="اكتب اسم الباحث..."
             value={search}
             onChange={e => setSearch(e.target.value)}
             sx={{ background: theme.palette.background.paper, borderRadius: 2 }}
           />
-          <Button
-            type="submit"
-            variant="contained"
-            color="primary"
-            size="large"
-            startIcon={<SearchIcon />}
-            // disabled={loading || !search.trim() || search.length < 10}
-            disabled={loading || !search.trim()}
-            sx={{ px: 4, fontWeight: 700, borderRadius: 2,
-              // background: theme.palette.primary.main,
-              ...theme.btn1,
-              '&:hover':{
-                ...theme.btn1Hover,
-              }
-             }}
-
-          >
-            بحث
-          </Button>
+          <Box sx={{ display: 'flex', gap: 1 }}>
+            <Button
+              type="submit"
+              variant="contained"
+              color="primary"
+              size="large"
+              startIcon={<SearchIcon />}
+              disabled={loading || !search.trim()}
+              sx={{ px: 4, fontWeight: 700, borderRadius: 2,
+                ...theme.btn1,
+                '&:hover':{
+                  ...theme.btn1Hover,
+                }
+              }}
+            >
+              بحث
+            </Button>
+            <Button
+              variant="outlined"
+              color="inherit"
+              size="large"
+              startIcon={<ClearIcon />}
+              onClick={handleClear}
+              disabled={!search.trim()}
+              sx={{ fontWeight: 700, borderRadius: 2 }}
+            >
+              مسح
+            </Button>
+          </Box>
         </Box>
         {Array.isArray(result) && result.length > 0 && (
-          <Grid container spacing={3} sx={{ mt: 2 }}>
-            {result.map((item, idx) => (
-              <Grid item xs={12} sm={6} md={6} key={idx}>
-                <Box
-                  sx={{
-                    ...theme.card1, // Apply card1 properties
-                    p: 3,
-                    display: 'flex',
-                    flexDirection: 'column',
-                    minHeight: 180,
-                    justifyContent: 'space-between',
-                    '&:hover': {
-                      boxShadow: theme.shadows[theme.palette.mode === 'light' ? 8 : 16],
-                    },
-                  }}
-                >
-                  <Typography variant="h6" fontWeight={800} color={theme.palette.primary} gutterBottom sx={{ mb: 1, textAlign: 'center', fontSize: '1.1rem' }}>
-                    {item.title}
-                  </Typography>
-                  <Box sx={{ borderBottom: `1px solid ${theme.palette.divider}`, mb: 2, opacity: 0.5 }} />
-                  <Typography variant="body1" fontWeight={600} color={theme.palette.text.secondary} sx={{ mb: 2, textAlign: 'center' }}>
-                    {item.person_name || '---'}
-                  </Typography>
-                  <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mt: 'auto' }}>
-                    <Typography variant="body2" color={theme.palette.text.secondary} fontWeight={500}>
-                      {item.university || '---'}
-                    </Typography>
-                  </Box>
-                </Box>
-              </Grid>
-            ))}
-          </Grid>
+          <>
+            <Typography variant="subtitle1" sx={{ mt: 2, textAlign: 'right', fontWeight: 600, color: theme.palette.primary.main }}>
+              تم العثور على 
+              {/* {result.length}  */}
+              <span style={{ backgroundColor: theme.palette.bg3.main, padding: '4px 7px', borderRadius: '5px',border:'1px solid yellow',color:'#fff'}}>{result.length}</span> 
+            </Typography>
+
+            <TableContainer component={Paper} sx={{ mt: 2, ...theme.card2, direction: 'rtl'}}>
+              <Table dir="rtl">
+              <TableHead>
+                <TableRow sx={{ backgroundColor: theme.palette.mode === 'light' ? 'rgba(0, 0, 0, 0.04)' : 'rgba(255, 255, 255, 0.05)' }}>
+                  <TableCell sx={{ fontWeight: 700, textAlign: 'start' }}>الجامعة</TableCell>
+                  <TableCell sx={{ fontWeight: 700, textAlign: 'start' }}>اسم الباحث</TableCell>
+                  <TableCell sx={{ fontWeight: 700, textAlign: 'start' }}>عنوان الرسالة</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {result.map((item, idx) => (
+                  <TableRow key={idx} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+                    <TableCell sx={{ textAlign: 'start' }}>{item.university || '---'}</TableCell>
+                    <TableCell sx={{ textAlign: 'start' }}>
+                      {item.person_name ? highlightSearchTerm(item.person_name, search) : '---'}
+                    </TableCell>
+                    <TableCell sx={{ textAlign: 'start' }}>{item.title}</TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+          </>
         )}
         {notFound && (
           <Alert severity="warning" sx={{ mt: 4, fontWeight: 700, borderRadius: 2, textAlign: 'center' }}>
-            هذا العنوان غير موجود في قاعدة البيانات.
+            لا توجد نتائج لهذا الباحث في قاعدة البيانات.
           </Alert>
         )}
       </Container>
