@@ -237,7 +237,7 @@ const Header = () => {
                 <Typography
                   sx={{
                     color:'yellow',
-                    display:'none'
+                    display:'none',
                   }}
                 >/- همام مختار عبدالسلام /- الحارث مختار عبدالسلام</Typography>
                 <MainTitle mainTitle={'المكتب المركزية'} fSize='1.5rem'/>
