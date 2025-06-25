@@ -13,6 +13,7 @@ import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
 import Autocomplete from '@mui/material/Autocomplete';
 import MainTitle from '../components/MainTitle';
 import MainText from '../components/MainText';
+import { API_BASE_URL, BASE_DOMAIN, endpoints } from '../api/config';
 
 const LibraryPage = () => {
   const theme = useTheme();
@@ -40,7 +41,7 @@ const LibraryPage = () => {
       setLoading(true);
       setError(null);
       try {
-        const res = await fetch('https://alalem.c-library.org/api/theses/latest');
+        const res = await fetch(endpoints.latestTheses);
         if (!res.ok) throw new Error('network');
         const data = await res.json();
         if (isMounted) setLatestData(Array.isArray(data) ? data : []);
@@ -57,13 +58,13 @@ const LibraryPage = () => {
 
   // جلب بيانات الفلاتر
   useEffect(() => {
-    fetch('https://alalem.c-library.org/api/universities')
+    fetch(endpoints.universities)
       .then(res => res.json())
       .then(data => setUniversities(Array.isArray(data) ? data : []));
-    fetch('https://alalem.c-library.org/api/specializations')
+    fetch(endpoints.specializations)
       .then(res => res.json())
       .then(data => setSpecializations(Array.isArray(data) ? data : []));
-    fetch('https://alalem.c-library.org/api/degrees')
+    fetch(endpoints.degrees)
       .then(res => res.json())
       .then(data => setDegrees(Array.isArray(data) ? data : []));
   }, []);
@@ -97,7 +98,7 @@ const LibraryPage = () => {
       }
     }
     try {
-      const res = await fetch(`https://alalem.c-library.org/api/theses/search?${params.toString()}`);
+      const res = await fetch(`${endpoints.searchTheses}?${params.toString()}`);
       if (!res.ok) throw new Error('network');
       const data = await res.json();
       setLatestData(Array.isArray(data) ? data : []);
@@ -121,7 +122,7 @@ const LibraryPage = () => {
     setLoading(true);
     setError(null);
     try {
-      const res = await fetch('https://alalem.c-library.org/api/theses/latest');
+      const res = await fetch(endpoints.latestTheses);
       if (!res.ok) throw new Error('network');
       const data = await res.json();
       setLatestData(Array.isArray(data) ? data : []);
@@ -341,7 +342,7 @@ const LibraryPage = () => {
                         background:theme.palette.bg3.sec,
                         }
                       }}
-                      href={item.pdf_path ? `https://alalem.c-library.org${item.pdf_path.replace('/home/c-library-alalem/htdocs/alalem.c-library.org/storage/app/public','/storage')}` : undefined}
+                      href={item.pdf_path ? `${BASE_DOMAIN}${item.pdf_path.replace('/home/c-library-alalem/htdocs/alalem.c-library.org/storage/app/public','/storage')}` : undefined}
                       target="_blank"
                       rel="noopener noreferrer"
                       disabled={!item.pdf_path}

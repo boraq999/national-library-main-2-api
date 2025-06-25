@@ -3,6 +3,7 @@ import { Box, Container, Typography, TextField, Button, Grid, useTheme, Alert } 
 import SearchIcon from '@mui/icons-material/Search';
 import MainTitle from '../components/MainTitle';
 import MainText from '../components/MainText';
+import { endpoints } from '../api/config';
 
 
 
@@ -21,7 +22,7 @@ const ReadyTransactions = () => {
     setNotFound(false);
     try {
       const encodedSearchQuery = encodeURIComponent(search);
-      const apiUrl = `https://alalem.c-library.org/api/reserved-thesis-titles-search-guests?q=${encodedSearchQuery}`;
+      const apiUrl = `${endpoints.reservedThesisTitles}?q=${encodedSearchQuery}`;
       
       const res = await fetch(apiUrl);
       const data = await res.json();
