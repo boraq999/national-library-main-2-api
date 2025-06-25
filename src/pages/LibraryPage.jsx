@@ -272,7 +272,14 @@ const LibraryPage = () => {
             </Typography>
           </Grid>
         ) : (
-          results.map(item => (
+          <>
+            <Grid item xs={12}>
+              <Typography variant="subtitle1" sx={{ mb: 2, textAlign: 'right', fontWeight: 600, color: theme.palette.primary.main }}>
+                تم العثور على 
+                <span style={{ backgroundColor: '#33d13df9', padding: '4px 7px', borderRadius: '5px', border:'1px solid yellow', color:'#fff'}}>{results.length}</span> نتيجة
+              </Typography>
+            </Grid>
+            {results.map(item => (
             <Grid item xs={12} md={6} key={item.id}>
               <Box
                 sx={{
@@ -360,7 +367,8 @@ const LibraryPage = () => {
                 </Grid>
               </Box>
             </Grid>
-          ))
+          ))}
+          </>
         )}
       </Grid>
     </Container>

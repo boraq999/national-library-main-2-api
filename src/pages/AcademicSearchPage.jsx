@@ -1,6 +1,7 @@
 import { useState,useEffect } from 'react';
 import { Box, Container, Typography, TextField, Button, Grid, useTheme, Alert } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
+import ClearIcon from '@mui/icons-material/Clear';
 import MainTitle from '../components/MainTitle';
 import MainText from '../components/MainText';
 import { endpoints } from '../api/config';
@@ -40,11 +41,23 @@ const AcademicSearchPage = () => {
     }
   };
 
-  
-
+  const handleClear = () => {
+    setSearch('');
+    setResult(null);
+    setNotFound(false);
+  };
 
   return (
-    <Box sx={{ minHeight: '70vh',padding: '130px 20px 50px', display: 'flex', alignItems: 'center', justifyContent: 'center', background: theme.palette.background.default }}>
+    <Box sx={{ minHeight: '70vh',
+      padding: '130px 20px 50px',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      background: theme.palette.background.default,
+      py:15,
+      px:{xs:1,md:10,lg:15},
+      ...theme.bgGrid1,
+       }}>
       <Container >
 
         <MainTitle mainTitle={'ابحث عن عنوان رسالة بحثية'} />
@@ -61,28 +74,45 @@ const AcademicSearchPage = () => {
             onChange={e => setSearch(e.target.value)}
             sx={{ background: theme.palette.background.paper, borderRadius: 2 }}
           />
-          <Button
-            type="submit"
-            variant="contained"
-            color="primary"
-            size="large"
-            startIcon={<SearchIcon />}
-            // disabled={loading || !search.trim() || search.length < 10}
-            disabled={loading || !search.trim()}
-            sx={{ px: 4, fontWeight: 700, borderRadius: 2,
-              // background: theme.palette.primary.main,
-              ...theme.btn1,
-              '&:hover':{
-                ...theme.btn1Hover,
-              }
-             }}
-
-          >
-            بحث
-          </Button>
+          <Box sx={{ display: 'flex', gap: 1 }}>
+            <Button
+              type="submit"
+              variant="contained"
+              color="primary"
+              size="large"
+              startIcon={<SearchIcon />}
+              // disabled={loading || !search.trim() || search.length < 10}
+              disabled={loading || !search.trim()}
+              sx={{ px: 4, fontWeight: 700, borderRadius: 2,
+                // background: theme.palette.primary.main,
+                ...theme.btn1,
+                '&:hover':{
+                  ...theme.btn1Hover,
+                }
+              }}
+            >
+              بحث
+            </Button>
+            <Button
+              variant="outlined"
+              color="inherit"
+              size="large"
+              startIcon={<ClearIcon />}
+              onClick={handleClear}
+              disabled={!search.trim()}
+              sx={{ fontWeight: 700, borderRadius: 2 }}
+            >
+              مسح
+            </Button>
+          </Box>
         </Box>
         {Array.isArray(result) && result.length > 0 && (
-          <Grid container spacing={3} sx={{ mt: 2 }}>
+          <>
+            <Typography variant="subtitle1" sx={{ mt: 2, textAlign: 'right', fontWeight: 600, color: theme.palette.primary.main }}>
+              تم العثور على 
+              <span style={{ backgroundColor: '#33d13df9', padding: '4px 7px', borderRadius: '5px', border:'1px solid yellow', color:'#fff'}}>{result.length}</span> نتيجة
+            </Typography>
+            <Grid container spacing={3} sx={{ mt: 2 }}>
             {result.map((item, idx) => (
               <Grid item xs={12} sm={6} md={6} key={idx}>
                 <Box
@@ -114,6 +144,7 @@ const AcademicSearchPage = () => {
               </Grid>
             ))}
           </Grid>
+          </>
         )}
         {notFound && (
           <Alert severity="warning" sx={{ mt: 4, fontWeight: 700, borderRadius: 2, textAlign: 'center' }}>
