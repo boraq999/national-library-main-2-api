@@ -32,6 +32,8 @@ const LibraryPage = () => {
   const [pendingSpecialization, setPendingSpecialization] = useState(null);
   const [pendingDegree, setPendingDegree] = useState(null);
   const [showFilterWarning, setShowFilterWarning] = useState(false);
+  const [pagination, setPagination] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
   // إضافة خيار للمستخدم لتحديد نوع البحث (عنوان أو باحث)
   const [searchType, setSearchType] = useState('title'); // 'title' أو 'author'
 
@@ -43,8 +45,11 @@ const LibraryPage = () => {
       try {
         const res = await fetch(endpoints.latestTheses);
         if (!res.ok) throw new Error('network');
-        const data = await res.json();
-        if (isMounted) setLatestData(Array.isArray(data) ? data : []);
+        const response = await res.json();
+        if (isMounted) {
+          setLatestData(Array.isArray(response.data) ? response.data : []);
+          setPagination(response.pagination || null);
+        }
       } catch (err) {
         if (isMounted) setError('تعذر الاتصال بالخادم. يرجى التحقق من اتصالك بالإنترنت أو المحاولة لاحقاً.');
         // لا تفرغ النتائج حتى تبقى الصفحة كما هي
@@ -73,7 +78,37 @@ const LibraryPage = () => {
   // تفعيل زر البحث إذا تم اختيار جامعة أو تخصص أو تم إدخال نص في حقل البحث
   const isSearchEnabled = !!pendingUniversity || !!pendingSpecialization || !!pendingSearch.trim();
 
-  // عند الضغط على زر البحث يتم جلب النتائج من /api/theses/search مع الفلاتر
+  // دالة البحث مع إمكانية تحديد الصفحة
+  const performSearch = async (page = 1) => {
+    const params = new URLSearchParams();
+    if (selectedUniversity) params.append('university_id', selectedUniversity.id);
+    if (selectedSpecialization) params.append('specialization_id', selectedSpecialization.id);
+    if (selectedDegree) params.append('degree_id', selectedDegree.id);
+    if (search.trim()) {
+      if (searchType === 'title') {
+        params.append('title', search.trim());
+      } else if (searchType === 'author') {
+        params.append('author', search.trim());
+      }
+    }
+    params.append('page', page);
+    
+    setLoading(true);
+    setError(null);
+    try {
+      const res = await fetch(`${endpoints.searchTheses}?${params.toString()}`);
+      if (!res.ok) throw new Error('network');
+      const response = await res.json();
+      setLatestData(Array.isArray(response.data) ? response.data : []);
+      setPagination(response.pagination || null);
+    } catch (err) {
+      setError('تعذر الاتصال بالخادم. يرجى التحقق من اتصالك بالإنترنت أو المحاولة لاحقاً.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // عند الضغط على زر البحث
   const handleSearch = async () => {
     if (!pendingSearch.trim() && !pendingUniversity && !pendingSpecialization && !pendingDegree) {
       setShowFilterWarning(true);
@@ -84,29 +119,8 @@ const LibraryPage = () => {
     setSelectedUniversity(pendingUniversity);
     setSelectedSpecialization(pendingSpecialization);
     setSelectedDegree(pendingDegree);
-    setLoading(true);
-    setError(null);
-    const params = new URLSearchParams();
-    if (pendingUniversity) params.append('university_id', pendingUniversity.id);
-    if (pendingSpecialization) params.append('specialization_id', pendingSpecialization.id);
-    if (pendingDegree) params.append('degree_id', pendingDegree.id);
-    if (pendingSearch.trim()) {
-      if (searchType === 'title') {
-        params.append('title', pendingSearch.trim());
-      } else if (searchType === 'author') {
-        params.append('author', pendingSearch.trim());
-      }
-    }
-    try {
-      const res = await fetch(`${endpoints.searchTheses}?${params.toString()}`);
-      if (!res.ok) throw new Error('network');
-      const data = await res.json();
-      setLatestData(Array.isArray(data) ? data : []);
-    } catch (err) {
-      setError('تعذر الاتصال بالخادم. يرجى التحقق من اتصالك بالإنترنت أو المحاولة لاحقاً.');
-    } finally {
-      setLoading(false);
-    }
+    setCurrentPage(1);
+    performSearch(1);
   };
 
   // عند الضغط على زر مسح الفلاتر، إعادة جلب بيانات latest
@@ -119,13 +133,15 @@ const LibraryPage = () => {
     setSelectedUniversity(null);
     setSelectedSpecialization(null);
     setSelectedDegree(null);
+    setCurrentPage(1);
     setLoading(true);
     setError(null);
     try {
       const res = await fetch(endpoints.latestTheses);
       if (!res.ok) throw new Error('network');
-      const data = await res.json();
-      setLatestData(Array.isArray(data) ? data : []);
+      const response = await res.json();
+      setLatestData(Array.isArray(response.data) ? response.data : []);
+      setPagination(response.pagination || null);
     } catch (err) {
       setError('تعذر الاتصال بالخادم. يرجى التحقق من اتصالك بالإنترنت أو المحاولة لاحقاً.');
       // لا تفرغ النتائج حتى تبقى الصفحة كما هي
@@ -276,7 +292,14 @@ const LibraryPage = () => {
             <Grid item xs={12}>
               <Typography variant="subtitle1" sx={{ mb: 2, textAlign: 'right', fontWeight: 600, color: theme.palette.primary.main }}>
                 تم العثور على 
-                <span style={{ backgroundColor: '#33d13df9', padding: '4px 7px', borderRadius: '5px', border:'1px solid yellow', color:'#fff'}}>{results.length}</span> نتيجة
+                <span style={{ backgroundColor: '#33d13df9', padding: '4px 7px', borderRadius: '5px', border:'1px solid yellow', color:'#fff'}}>
+                  {pagination ? pagination.total : results.length}
+                </span> نتيجة
+                {pagination && pagination.last_page > 1 && (
+                  <span style={{ marginRight: '10px', fontSize: '14px', color: '#666' }}>
+                    (الصفحة {pagination.current_page} من {pagination.last_page})
+                  </span>
+                )}
               </Typography>
             </Grid>
             {results.map(item => (
@@ -371,6 +394,61 @@ const LibraryPage = () => {
           </>
         )}
       </Grid>
+      
+      {/* أزرار التنقل بين الصفحات */}
+      {pagination && pagination.last_page > 1 && (
+        <Box sx={{ display: 'flex', justifyContent: 'center', mt: 4, mb: 2 }}>
+          <Button 
+            variant="contained"
+            disabled={currentPage === 1} 
+            onClick={() => {
+              const newPage = currentPage - 1;
+              setCurrentPage(newPage);
+              performSearch(newPage);
+            }}
+            sx={{ 
+              mx: 1, 
+              backgroundColor: theme.palette.bg3.main,
+              color: 'white',
+              '&:hover': {
+                backgroundColor: theme.palette.bg3.sec
+              },
+              '&:disabled': {
+                backgroundColor: theme.palette.grey[300],
+                color: theme.palette.grey[500]
+              }
+            }}
+          >
+            السابق
+          </Button>
+          <Typography sx={{ mx: 2, alignSelf: 'center', fontWeight: 600 }}>
+            {currentPage} من {pagination.last_page}
+          </Typography>
+          <Button 
+            variant="contained"
+            disabled={currentPage === pagination.last_page} 
+            onClick={() => {
+              const newPage = currentPage + 1;
+              setCurrentPage(newPage);
+              performSearch(newPage);
+            }}
+            sx={{ 
+              mx: 1,
+              backgroundColor: theme.palette.bg3.main,
+              color: 'white',
+              '&:hover': {
+                backgroundColor: theme.palette.bg3.sec
+              },
+              '&:disabled': {
+                backgroundColor: theme.palette.grey[300],
+                color: theme.palette.grey[500]
+              }
+            }}
+          >
+            التالي
+          </Button>
+        </Box>
+      )}
     </Container>
   );
 };
