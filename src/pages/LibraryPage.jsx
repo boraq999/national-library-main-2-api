@@ -79,16 +79,21 @@ const LibraryPage = () => {
   const isSearchEnabled = !!pendingUniversity || !!pendingSpecialization || !!pendingSearch.trim();
 
   // دالة البحث مع إمكانية تحديد الصفحة
-  const performSearch = async (page = 1) => {
+  const performSearch = async (page = 1, useCurrentFilters = false) => {
     const params = new URLSearchParams();
-    if (selectedUniversity) params.append('university_id', selectedUniversity.id);
-    if (selectedSpecialization) params.append('specialization_id', selectedSpecialization.id);
-    if (selectedDegree) params.append('degree_id', selectedDegree.id);
-    if (search.trim()) {
+    const uni = useCurrentFilters ? selectedUniversity : pendingUniversity;
+    const spec = useCurrentFilters ? selectedSpecialization : pendingSpecialization;
+    const deg = useCurrentFilters ? selectedDegree : pendingDegree;
+    const searchText = useCurrentFilters ? search : pendingSearch;
+    
+    if (uni) params.append('university_id', uni.id);
+    if (spec) params.append('specialization_id', spec.id);
+    if (deg) params.append('degree_id', deg.id);
+    if (searchText.trim()) {
       if (searchType === 'title') {
-        params.append('title', search.trim());
+        params.append('title', searchText.trim());
       } else if (searchType === 'author') {
-        params.append('author', search.trim());
+        params.append('author', searchText.trim());
       }
     }
     params.append('page', page);
@@ -404,7 +409,7 @@ const LibraryPage = () => {
             onClick={() => {
               const newPage = currentPage - 1;
               setCurrentPage(newPage);
-              performSearch(newPage);
+              performSearch(newPage, true);
             }}
             sx={{ 
               mx: 1, 
@@ -430,7 +435,7 @@ const LibraryPage = () => {
             onClick={() => {
               const newPage = currentPage + 1;
               setCurrentPage(newPage);
-              performSearch(newPage);
+              performSearch(newPage, true);
             }}
             sx={{ 
               mx: 1,
