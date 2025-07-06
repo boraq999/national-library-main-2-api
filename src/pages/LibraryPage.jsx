@@ -36,6 +36,8 @@ const LibraryPage = () => {
   const [currentPage, setCurrentPage] = useState(1);
   // إضافة خيار للمستخدم لتحديد نوع البحث (عنوان أو باحث)
   const [searchType, setSearchType] = useState('title'); // 'title' أو 'author'
+  const [isSearchMode, setIsSearchMode] = useState(false); // لتتبع ما إذا كان المستخدم في وضع البحث
+  const resultsRef = React.useRef(null);
 
   useEffect(() => {
     let isMounted = true;
@@ -77,6 +79,16 @@ const LibraryPage = () => {
   // تعديل منطق تفعيل زر البحث: يجب اختيار جامعة أو تخصص (ولا يكفي اختيار الدرجة العلمية فقط)
   // تفعيل زر البحث إذا تم اختيار جامعة أو تخصص أو تم إدخال نص في حقل البحث
   const isSearchEnabled = !!pendingUniversity || !!pendingSpecialization || !!pendingSearch.trim();
+
+  // دالة التمرير لبداية قسم النتائج
+  const scrollToResults = () => {
+    setTimeout(() => {
+      const element = document.getElementById('results-section');
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }, 300);
+  };
 
   // دالة البحث مع إمكانية تحديد الصفحة
   const performSearch = async (page = 1, useCurrentFilters = false) => {
@@ -125,6 +137,7 @@ const LibraryPage = () => {
     setSelectedSpecialization(pendingSpecialization);
     setSelectedDegree(pendingDegree);
     setCurrentPage(1);
+    setIsSearchMode(true); // تفعيل وضع البحث
     performSearch(1);
   };
 
@@ -139,6 +152,7 @@ const LibraryPage = () => {
     setSelectedSpecialization(null);
     setSelectedDegree(null);
     setCurrentPage(1);
+    setIsSearchMode(false); // إلغاء وضع البحث
     setLoading(true);
     setError(null);
     try {
@@ -215,6 +229,9 @@ const LibraryPage = () => {
             </Select>
           </FormControl>
         </Box>
+
+
+
         {/* السطر الثاني: الفلاتر المنسدلة */}
         <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 2, mb: 2, flexDirection: { xs: 'column', sm: 'row' }, justifyContent: 'space-between' }}>
           <Autocomplete
@@ -272,7 +289,7 @@ const LibraryPage = () => {
           </Button>
         </Box>
       </Box>
-      <Grid container spacing={3} >
+      <Grid container spacing={3} id="results-section">
         {loading ? (
           <Grid item xs={12}>
             <Typography align="center" color="text.secondary">جاري تحميل البيانات...</Typography>
@@ -294,19 +311,21 @@ const LibraryPage = () => {
           </Grid>
         ) : (
           <>
-            <Grid item xs={12}>
-              <Typography variant="subtitle1" sx={{ mb: 2, textAlign: 'right', fontWeight: 600, color: theme.palette.primary.main }}>
-                تم العثور على 
-                <span style={{ backgroundColor: '#33d13df9', padding: '4px 7px', borderRadius: '5px', border:'1px solid yellow', color:'#fff'}}>
-                  {pagination ? pagination.total : results.length}
-                </span> نتيجة
-                {pagination && pagination.last_page > 1 && (
-                  <span style={{ marginRight: '10px', fontSize: '14px', color: '#666' }}>
-                    (الصفحة {pagination.current_page} من {pagination.last_page})
-                  </span>
-                )}
-              </Typography>
-            </Grid>
+            {isSearchMode && (
+              <Grid item xs={12}>
+                <Typography variant="subtitle1" sx={{ mb: 2, textAlign: 'right', fontWeight: 600, color: theme.palette.primary.main }}>
+                  تم العثور على 
+                  <span style={{ backgroundColor: '#33d13df9', padding: '4px 7px', borderRadius: '5px', border:'1px solid yellow', color:'#fff'}}>
+                    {pagination ? pagination.total : results.length}
+                  </span> نتيجة
+                  {pagination && pagination.last_page > 1 && (
+                    <span style={{ marginRight: '10px', fontSize: '14px', color: '#666' }}>
+                      (الصفحة {pagination.current_page} من {pagination.last_page})
+                    </span>
+                  )}
+                </Typography>
+              </Grid>
+            )}
             {results.map(item => (
             <Grid item xs={12} md={6} key={item.id}>
               <Box
@@ -410,6 +429,7 @@ const LibraryPage = () => {
               const newPage = currentPage - 1;
               setCurrentPage(newPage);
               performSearch(newPage, true);
+              scrollToResults();
             }}
             sx={{ 
               mx: 1, 
@@ -436,6 +456,7 @@ const LibraryPage = () => {
               const newPage = currentPage + 1;
               setCurrentPage(newPage);
               performSearch(newPage, true);
+              scrollToResults();
             }}
             sx={{ 
               mx: 1,
