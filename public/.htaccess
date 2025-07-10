@@ -1,22 +1,27 @@
-# .htaccess for browser caching and gzip compression
+# Performance optimizations
 <IfModule mod_expires.c>
   ExpiresActive On
+  ExpiresByType image/webp "access plus 1 year"
   ExpiresByType image/jpg "access plus 1 year"
   ExpiresByType image/jpeg "access plus 1 year"
   ExpiresByType image/gif "access plus 1 year"
   ExpiresByType image/png "access plus 1 year"
-  ExpiresByType text/css "access plus 1 month"
+  ExpiresByType image/svg+xml "access plus 1 year"
+  ExpiresByType text/css "access plus 1 year"
   ExpiresByType application/pdf "access plus 1 month"
-  ExpiresByType text/javascript "access plus 1 month"
-  ExpiresByType application/javascript "access plus 1 month"
-  ExpiresByType application/x-javascript "access plus 1 month"
+  ExpiresByType text/javascript "access plus 1 year"
+  ExpiresByType application/javascript "access plus 1 year"
+  ExpiresByType application/x-javascript "access plus 1 year"
   ExpiresByType application/font-woff2 "access plus 1 year"
   ExpiresByType application/font-woff "access plus 1 year"
   ExpiresByType application/vnd.ms-fontobject "access plus 1 year"
-  ExpiresByType application/font-sfnt "access plus 1 year"
-  ExpiresDefault "access plus 2 days"
+  ExpiresByType font/ttf "access plus 1 year"
+  ExpiresByType font/otf "access plus 1 year"
+  ExpiresByType application/json "access plus 1 day"
+  ExpiresDefault "access plus 1 week"
 </IfModule>
 
+# Gzip compression
 <IfModule mod_deflate.c>
   AddOutputFilterByType DEFLATE text/plain
   AddOutputFilterByType DEFLATE text/html
@@ -27,4 +32,30 @@
   AddOutputFilterByType DEFLATE application/rss+xml
   AddOutputFilterByType DEFLATE application/javascript
   AddOutputFilterByType DEFLATE application/x-javascript
+  AddOutputFilterByType DEFLATE application/json
+  AddOutputFilterByType DEFLATE image/svg+xml
+</IfModule>
+
+# Brotli compression
+<IfModule mod_brotli.c>
+  AddOutputFilterByType BROTLI_COMPRESS text/plain
+  AddOutputFilterByType BROTLI_COMPRESS text/html
+  AddOutputFilterByType BROTLI_COMPRESS text/css
+  AddOutputFilterByType BROTLI_COMPRESS application/javascript
+  AddOutputFilterByType BROTLI_COMPRESS application/json
+</IfModule>
+
+# Security headers
+<IfModule mod_headers.c>
+  Header always set X-Content-Type-Options nosniff
+  Header always set X-Frame-Options DENY
+  Header always set X-XSS-Protection "1; mode=block"
+  Header always set Referrer-Policy "strict-origin-when-cross-origin"
+</IfModule>
+
+# Preload critical resources
+<IfModule mod_headers.c>
+  <FilesMatch "\.(css|js)$">
+    Header set Cache-Control "public, max-age=31536000, immutable"
+  </FilesMatch>
 </IfModule>

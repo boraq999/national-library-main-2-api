@@ -1,16 +1,12 @@
 :root {
-  font-family: 'Tajawal', 'Roboto', system-ui, Avenir, Helvetica, Arial, sans-serif;
+  font-family: 'Tajawal', system-ui, -apple-system, sans-serif;
   line-height: 1.5;
   font-weight: 400;
-
-  color-scheme: light dark;
   color: rgba(0, 0, 0, 0.87);
   background-color: #f5f7fa;
-
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  font-display: swap;
+  --primary-color: #667eea;
+  --secondary-color: #764ba2;
 }
 
 * {

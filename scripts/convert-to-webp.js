@@ -32,7 +32,13 @@ function getAllImages(dir) {
 async function convertToWebP(imgPath) {
   const outPath = imgPath.replace(/\.(jpg|jpeg|png)$/i, '.webp');
   if (fs.existsSync(outPath)) return;
-  await sharp(imgPath)
+  // Resize: إذا كانت الصورة أعرض من 500px، صغّرها إلى 500px عرض
+  const metadata = await sharp(imgPath).metadata();
+  let pipeline = sharp(imgPath);
+  if (metadata.width && metadata.width > 500) {
+    pipeline = pipeline.resize(500);
+  }
+  await pipeline
     .webp({ quality: 80 })
     .toFile(outPath);
   console.log('Converted:', outPath);

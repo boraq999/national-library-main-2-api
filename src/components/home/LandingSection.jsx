@@ -98,11 +98,11 @@ const LandingSection = () => {
                 <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', mt: 8, gap: 7 }}>
                     <picture>
                         <source srcSet="/v1_assets/banner/banner-1-Photoroom (1).webp" type="image/webp" />
-                        <img src="/v1_assets/banner/banner-1-Photoroom (1).png" alt="banner-1" loading="lazy" style={{ width: 140 }} />
+                        <img src="/v1_assets/banner/banner-1-Photoroom (1).png" alt="banner-1" style={{ width: 140 }} />
                     </picture>
                     <picture>
                         <source srcSet="/v1_assets/banner/banner-2-Photoroom.webp" type="image/webp" />
-                        <img src="/v1_assets/banner/banner-2-Photoroom.png" alt="banner-2" loading="lazy" style={{ width: 170, filter: 'brightness(1.8) contrast(1.5) invert(0.1)' }} />
+                        <img src="/v1_assets/banner/banner-2-Photoroom.png" alt="banner-2" style={{ width: 170, filter: 'brightness(1.8) contrast(1.5) invert(0.1)' }} />
                     </picture>
                 </Box>
             </Container>

@@ -9,20 +9,20 @@
     <meta name="author" content="C-Library" />
     <meta name="robots" content="index, follow" />
     
-    <!-- Performance optimizations -->
     <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="dns-prefetch" href="//fonts.googleapis.com">
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap"></noscript>
     
-    <!-- Critical CSS will be inlined by build process -->
     <style>
-      html{font-family:system-ui,-apple-system,sans-serif;line-height:1.5}
-      body{margin:0;background:#f5f7fa;direction:rtl}
+      html{font-family:'Tajawal',system-ui,-apple-system,sans-serif;line-height:1.5}
+      body{margin:0;background:#f5f7fa;direction:rtl;font-display:swap}
       #root{min-height:100vh}
-      .loading{display:flex;justify-content:center;align-items:center;height:100vh;font-size:18px}
+      .loading{display:flex;justify-content:center;align-items:center;height:100vh;font-size:18px;color:#667eea}
+      .skeleton{background:linear-gradient(90deg,#f0f0f0 25%,#e0e0e0 50%,#f0f0f0 75%);background-size:200% 100%;animation:loading 1.5s infinite}
+      @keyframes loading{0%{background-position:200% 0}100%{background-position:-200% 0}}
     </style>
     
-    <!-- Icons and manifest -->
     <link rel="icon" href="/favicon.ico" sizes="any">
     <link rel="apple-touch-icon" href="/apple-touch-icon.png">
     <link rel="manifest" href="/manifest.json">
@@ -32,6 +32,7 @@
   <body>
     <noscript>تحتاج إلى تفعيل JavaScript لتشغيل هذا التطبيق.</noscript>
     <div id="root"></div>
+    <script src="/preload.js"></script>
     <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>
