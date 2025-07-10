@@ -291,6 +291,7 @@ const Header = () => {
                 key={item.label}
                 component={Link}
                 to={item.path}
+                aria-label={item.label}
                 sx={{ 
                   color: 'inherit', 
                   mx: 1,

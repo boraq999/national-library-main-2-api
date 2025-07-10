@@ -266,7 +266,7 @@ const LibraryPage = () => {
         <Box sx={{ display: 'flex', flexDirection: 'row', gap: 2, justifyContent: { xs: 'center', sm: 'flex-end' }, width: '100%' }}>
           <Button
             variant="contained"
-            // color="primary"
+            aria-label="بحث"
             sx={{ minWidth: 120, fontWeight: 700, height: 56, alignSelf: 'center',
               color:'white',
               backgroundColor:theme.palette.bg3.main,
@@ -282,6 +282,7 @@ const LibraryPage = () => {
           <Button
             variant="outlined"
             color="secondary"
+            aria-label="مسح الفلاتر"
             sx={{ minWidth: 120, fontWeight: 700, height: 56, alignSelf: 'center' }}
             onClick={handleClear}
           >
@@ -381,8 +382,7 @@ const LibraryPage = () => {
                   <Grid item xs={12} sm={6}>
                     <Button
                       variant="contained"
-                      // color="primary"
-                      // color="#111111"
+                      aria-label="اطلع على الرسالة"
                       sx={{
                         background:theme.palette.bg3.main,
                         fontSize: 13,
@@ -424,6 +424,7 @@ const LibraryPage = () => {
         <Box sx={{ display: 'flex', justifyContent: 'center', mt: 4, mb: 2 }}>
           <Button 
             variant="contained"
+            aria-label="السابق"
             disabled={currentPage === 1} 
             onClick={() => {
               const newPage = currentPage - 1;
@@ -451,6 +452,7 @@ const LibraryPage = () => {
           </Typography>
           <Button 
             variant="contained"
+            aria-label="التالي"
             disabled={currentPage === pagination.last_page} 
             onClick={() => {
               const newPage = currentPage + 1;
