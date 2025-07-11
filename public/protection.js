@@ -97,6 +97,68 @@
     });
     
     
+    // Enhanced DevTools detection
+    let devtoolsOpen = false;
+    
+    function createOverlay() {
+        if (devtoolsOpen) return;
+        devtoolsOpen = true;
+        
+        // Hide original content
+        document.body.style.visibility = 'hidden';
+        
+        // Create strong overlay
+        const overlay = document.createElement('div');
+        overlay.id = 'protection-overlay';
+        overlay.innerHTML = `
+            <div style="
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100vw;
+                height: 100vh;
+                background: #000;
+                color: #fff;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 24px;
+                font-family: Arial, sans-serif;
+                z-index: 999999999;
+                user-select: none;
+                -webkit-user-select: none;
+            ">
+                ⚠️ غير مسموح بفتح أدوات المطور<br>
+                <small style="font-size: 16px; margin-top: 20px;">يرجى إغلاق أدوات المطور وإعادة تحميل الصفحة</small>
+            </div>
+        `;
+        document.body.appendChild(overlay);
+    }
+    
+    // Multiple detection methods
+    setInterval(function() {
+        // Method 1: Window size detection
+        if (window.outerHeight - window.innerHeight > 160 || 
+            window.outerWidth - window.innerWidth > 160) {
+            createOverlay();
+        }
+        
+        // Method 2: Console detection
+        let start = performance.now();
+        console.log('%c', 'color: transparent');
+        if (performance.now() - start > 100) {
+            createOverlay();
+        }
+    }, 1000);
+    
+    // Method 3: Debugger detection
+    setInterval(function() {
+        try {
+            debugger;
+            createOverlay();
+        } catch(e) {}
+    }, 2000);
+    
     // Disable common shortcuts
     document.addEventListener('keydown', function(e) {
         // Prevent Ctrl+P (Print)
