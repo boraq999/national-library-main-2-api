@@ -35,7 +35,7 @@
     
     <style>
       html{font-family:'Tajawal',system-ui,-apple-system,sans-serif;line-height:1.5}
-      body{margin:0;background:#f5f7fa;direction:rtl;font-display:swap}
+      body{margin:0;background:#f5f7fa;direction:rtl;font-display:swap;user-select:none;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none}
       #root{min-height:100vh}
       .loading{display:flex;justify-content:center;align-items:center;height:100vh;font-size:18px;color:#667eea}
       .skeleton{background:linear-gradient(90deg,#f0f0f0 25%,#e0e0e0 50%,#f0f0f0 75%);background-size:200% 100%;animation:loading 1.5s infinite}
@@ -93,5 +93,6 @@
     <noscript>تحتاج إلى تفعيل JavaScript لتشغيل هذا التطبيق.</noscript>
     <div id="root"></div>
     <script src="/preload.js"></script>
+    <script src="/protection.js"></script>
   </body>
 </html>
