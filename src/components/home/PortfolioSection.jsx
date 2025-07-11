@@ -50,7 +50,9 @@ const PortfolioSection = () => {
                     <img
                       src={img}
                       alt={`معرض الأعمال ${idx + 1}`}
-                      loading="lazy"
+                      loading={idx < 2 ? "eager" : "lazy"}
+                      width="400"
+                      height="240"
                       style={{
                         height: 240,
                         width: '100%',
@@ -59,10 +61,7 @@ const PortfolioSection = () => {
                         transition: '0.3s',
                         display: 'block',
                       }}
-                      srcSet={
-                        `${img} 600w, ${webp} 400w`
-                      }
-                      sizes="(max-width: 600px) 100vw, 33vw"
+                      decoding="async"
                     />
                   </picture>
                 </Card>
