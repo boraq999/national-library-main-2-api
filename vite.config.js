@@ -6,16 +6,18 @@ export default defineConfig({
   plugins: [
     react(),
     viteCompression({
+      verbose: true,
+      disable: false,
+      threshold: 1024,
       algorithm: 'gzip',
       ext: '.gz',
-      threshold: 1024,
-      deleteOriginFile: false,
     }),
     viteCompression({
+      verbose: true,
+      disable: false,
+      threshold: 1024,
       algorithm: 'brotliCompress',
       ext: '.br',
-      threshold: 1024,
-      deleteOriginFile: false,
     }),
   ],
   build: {
