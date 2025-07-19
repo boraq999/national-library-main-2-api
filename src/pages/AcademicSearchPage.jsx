@@ -29,8 +29,8 @@ const AcademicSearchPage = () => {
       const data = await res.json();
 
       setLoading(false);
-      if (data && data.length > 0) {
-        setResult(data);
+      if (data && data.data && data.data.length > 0) {
+        setResult(data.data);
       } else {
         setNotFound(true);
       }
