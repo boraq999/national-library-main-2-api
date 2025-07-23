@@ -49,7 +49,18 @@ const LibraryPage = () => {
         if (!res.ok) throw new Error('network');
         const response = await res.json();
         if (isMounted) {
-          setLatestData(Array.isArray(response.data) ? response.data : []);
+          // إعادة بناء البيانات لتناسب العرض (إضافة id افتراضي إذا لم يوجد)
+          let rebuilt = Array.isArray(response.data) ? response.data.map((item, idx) => ({
+            id: item.id ?? idx,
+            title: item.title,
+            year: item.year,
+            pdf_path: item.pdf_path,
+            university: typeof item.university === 'object' ? item.university.name : item.university,
+            specialization: typeof item.specialization === 'object' ? item.specialization.name : item.specialization,
+            degree: typeof item.degree === 'object' ? item.degree.name : item.degree,
+            author: typeof item.author === 'object' ? item.author.name : item.author,
+          })) : [];
+          setLatestData(rebuilt);
           setPagination(response.pagination || null);
         }
       } catch (err) {
@@ -116,7 +127,18 @@ const LibraryPage = () => {
       const res = await fetch(`${endpoints.searchTheses}?${params.toString()}`);
       if (!res.ok) throw new Error('network');
       const response = await res.json();
-      setLatestData(Array.isArray(response.data) ? response.data : []);
+      // إعادة بناء البيانات لتناسب العرض (إضافة id افتراضي إذا لم يوجد)
+      let rebuilt = Array.isArray(response.data) ? response.data.map((item, idx) => ({
+        id: item.id ?? idx,
+        title: item.title,
+        year: item.year,
+        pdf_path: item.pdf_path,
+        university: typeof item.university === 'object' ? item.university.name : item.university,
+        specialization: typeof item.specialization === 'object' ? item.specialization.name : item.specialization,
+        degree: typeof item.degree === 'object' ? item.degree.name : item.degree,
+        author: typeof item.author === 'object' ? item.author.name : item.author,
+      })) : [];
+      setLatestData(rebuilt);
       setPagination(response.pagination || null);
     } catch (err) {
       setError('تعذر الاتصال بالخادم. يرجى التحقق من اتصالك بالإنترنت أو المحاولة لاحقاً.');
@@ -236,8 +258,8 @@ const LibraryPage = () => {
         <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 2, mb: 2, flexDirection: { xs: 'column', sm: 'row' }, justifyContent: 'space-between' }}>
           <Autocomplete
             options={universities}
-            getOptionLabel={option => option.name || ''}
-            value={pendingUniversity}
+            getOptionLabel={option => (typeof option === 'string' ? option : option?.name || '')}
+            value={universities.find(u => u.id === pendingUniversity?.id) || null}
             onChange={(_, value) => setPendingUniversity(value)}
             renderInput={params => <TextField {...params} label="الجامعة" variant="outlined" />}
             sx={{ minWidth: 180, flex: 1 }}
@@ -245,8 +267,8 @@ const LibraryPage = () => {
           />
           <Autocomplete
             options={specializations}
-            getOptionLabel={option => option.name || ''}
-            value={pendingSpecialization}
+            getOptionLabel={option => (typeof option === 'string' ? option : option?.name || '')}
+            value={specializations.find(s => s.id === pendingSpecialization?.id) || null}
             onChange={(_, value) => setPendingSpecialization(value)}
             renderInput={params => <TextField {...params} label="التخصص" variant="outlined" />}
             sx={{ minWidth: 180, flex: 1 }}
@@ -254,8 +276,8 @@ const LibraryPage = () => {
           />
           <Autocomplete
             options={degrees}
-            getOptionLabel={option => option.name || ''}
-            value={pendingDegree}
+            getOptionLabel={option => (typeof option === 'string' ? option : option?.name || '')}
+            value={degrees.find(d => d.id === pendingDegree?.id) || null}
             onChange={(_, value) => setPendingDegree(value)}
             renderInput={params => <TextField {...params} label="الدرجة العلمية" variant="outlined" />}
             sx={{ minWidth: 180, flex: 1 }}
@@ -327,8 +349,8 @@ const LibraryPage = () => {
                 </Typography>
               </Grid>
             )}
-            {results.map(item => (
-            <Grid item xs={12} md={6} key={item.id}>
+            {results.map((item, idx) => (
+            <Grid item xs={12} md={6} key={item.id || idx}>
               <Box
                 sx={{
                   ...theme.card2,
@@ -352,13 +374,13 @@ const LibraryPage = () => {
                   <Grid item xs={12} sm={6}>
                     <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, flexDirection: 'row-reverse', background: (theme) => theme.palette.mode === 'light' ? theme.palette.background.default : theme.palette.background.paper, borderRadius: 2, p: 1, border: (theme) => theme.palette.mode === 'light' ? `1px solid ${theme.palette.divider}` : `1px solid ${theme.palette.divider}`, fontSize: 15, color: (theme) => theme.palette.mode === 'light' ? theme.palette.primary.dark : theme.palette.common.white, direction: 'rtl', textAlign: 'right' }}>
                       <PersonOutlineIcon sx={{ color: 'primary.main', ml: 1 }} />
-                      <Typography sx={{ fontWeight: 500 }}>{item.author?.name || ''}</Typography>
+                      <Typography sx={{ fontWeight: 500 }}>{item.author || ''}</Typography>
                     </Box>
                   </Grid>
                   <Grid item xs={12} sm={6}>
                     <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, flexDirection: 'row-reverse', background: (theme) => theme.palette.mode === 'light' ? theme.palette.background.default : theme.palette.background.paper, borderRadius: 2, p: 1, border: (theme) => theme.palette.mode === 'light' ? `1px solid ${theme.palette.divider}` : `1px solid ${theme.palette.divider}`, fontSize: 15, color: (theme) => theme.palette.mode === 'light' ? theme.palette.primary.dark : theme.palette.common.white, direction: 'rtl', textAlign: 'right' }}>
                       <AccountBalanceOutlinedIcon sx={{ color: 'primary.main', ml: 1 }} />
-                      <Typography sx={{ fontWeight: 500 }}>{item.university?.name || ''}</Typography>
+                      <Typography sx={{ fontWeight: 500 }}>{item.university || ''}</Typography>
                     </Box>
                   </Grid>
                   <Grid item xs={12} sm={6}>
@@ -370,13 +392,13 @@ const LibraryPage = () => {
                   <Grid item xs={12} sm={6}>
                     <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, flexDirection: 'row-reverse', background: (theme) => theme.palette.mode === 'light' ? theme.palette.background.default : theme.palette.background.paper, borderRadius: 2, p: 1, border: (theme) => theme.palette.mode === 'light' ? `1px solid ${theme.palette.divider}` : `1px solid ${theme.palette.divider}`, fontSize: 15, color: (theme) => theme.palette.mode === 'light' ? theme.palette.primary.dark : theme.palette.common.white, direction: 'rtl', textAlign: 'right' }}>
                       <SchoolOutlinedIcon sx={{ color: 'primary.main', ml: 1 }} />
-                      <Typography sx={{ fontWeight: 500 }}>{item.degree?.name || ''}</Typography>
+                      <Typography sx={{ fontWeight: 500 }}>{item.degree || ''}</Typography>
                     </Box>
                   </Grid>
                   <Grid item xs={12} sm={6}>
                     <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, flexDirection: 'row-reverse', background: (theme) => theme.palette.mode === 'light' ? theme.palette.background.default : theme.palette.background.paper, borderRadius: 2, p: 1, border: (theme) => theme.palette.mode === 'light' ? `1px solid ${theme.palette.divider}` : `1px solid ${theme.palette.divider}`, fontSize: 15, color: (theme) => theme.palette.mode === 'light' ? theme.palette.primary.dark : theme.palette.common.white, direction: 'rtl', textAlign: 'right' }}>
                       <BusinessCenterOutlinedIcon sx={{ color: 'primary.main', ml: 1 }} />
-                      <Typography sx={{ fontWeight: 500 }}>{item.specialization?.name || ''}</Typography>
+                      <Typography sx={{ fontWeight: 500 }}>{item.specialization || ''}</Typography>
                     </Box>
                   </Grid>
                   <Grid item xs={12} sm={6}>
@@ -402,7 +424,13 @@ const LibraryPage = () => {
                         background:theme.palette.bg3.sec,
                         }
                       }}
-                      href={item.pdf_path ? `${BASE_DOMAIN}${item.pdf_path.replace('/home/c-library-alalem/htdocs/alalem.c-library.org/storage/app/public','/storage')}` : undefined}
+                      href={
+                        item.pdf_path
+                          ? (item.pdf_path.startsWith('http')
+                              ? item.pdf_path
+                              : `${API_BASE_URL.replace(/\/api$/, '')}${item.pdf_path}`)
+                          : undefined
+                      }
                       target="_blank"
                       rel="noopener noreferrer"
                       disabled={!item.pdf_path}
