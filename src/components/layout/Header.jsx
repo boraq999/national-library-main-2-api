@@ -172,7 +172,7 @@ const Header = () => {
         justifyContent: 'space-between',
         alignItems: 'center'
       }}>
-        <IconButton onClick={toggleColorMode} size="small">
+        <IconButton onClick={toggleColorMode} size="small" aria-label="تبديل الوضع المظلم">
           {mode === 'dark' ? <LightMode /> : <DarkMode />}
         </IconButton>
         
@@ -291,6 +291,7 @@ const Header = () => {
                 key={item.label}
                 component={Link}
                 to={item.path}
+                aria-label={item.label}
                 sx={{ 
                   color: 'inherit', 
                   mx: 1,
@@ -306,8 +307,7 @@ const Header = () => {
 
           <IconButton 
             onClick={toggleColorMode} 
-            // color="inherit"
-            
+            aria-label="تبديل الوضع المظلم"
             sx={{ ml: 1,
               color:theme.palette.primary.main
              }}
