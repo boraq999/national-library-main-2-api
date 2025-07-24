@@ -1,5 +1,8 @@
 import { Box, Container, Typography, Grid, Card, CardContent, IconButton, useTheme } from '@mui/material';
 import { Phone, Email, Facebook, LocationOn } from '@mui/icons-material';
+import MainTitle from '../components/MainTitle';
+import MainText from '../components/MainText';
+import { alpha } from '@mui/material/styles';
 
 const ContactPage = () => {
   const theme = useTheme();
@@ -17,33 +20,36 @@ const ContactPage = () => {
     {
       icon: <Facebook />,
       title: 'فيسبوك',
-      value: 'المكتبة الوطنية السعودية'
+      value: 'المكتبة المركزية '
     },
     {
       icon: <LocationOn />,
-      title: 'العنوان 00000',
-      value: 'الرياض، المملكة العربية السعودية'
+      title: 'العنوان ',
+      value: 'تاجوراء - طرابلس - ليبيا'
     }
   ];
 
   return (
     <>
-    <Box  sx={{ py: 12,
-      
+
+
+
+
+    <Box  sx={{ pt: 12,
+      pt:15,
+      pb: 4,
+      px:{xs:2,md:10,lg:15},
       ...theme.bgGrid1,   
         borderColor:theme.palette.bg2.main, 
-        backgroundColor: theme.palette.bg1.main,  
+        backgroundColor: theme.palette.bg1.main,
+        position:'relative'  
      }}>
-      <Typography variant="h3" component="h1" textAlign="center" mb={2} color="primary">
-        تواصل معنا
-      </Typography>
-      
-      <Typography variant="body1" textAlign="center" mb={4} color="text.secondary" sx={{ maxWidth: 600, mx: 'auto' }}>
-        نحن هنا لخدمتكم ومساعدتكم. لا تترددوا في التواصل معنا عبر أي من الوسائل التالية
-      </Typography>
+
+      <MainTitle mainTitle={"تواصل معنا"} />
+      <MainText mainText={"نحن هنا لخدمتكم ومساعدتكم. لا تترددوا في التواصل معنا عبر أي من الوسائل التالية"} />
       
       {/* معلومات الاتصال */}
-      <Grid container spacing={3} mb={6}>
+      <Grid container spacing={3} mt={4} mb={6}>
         {contactInfo.map((item, index) => (
           <Grid item xs={12} sm={6} md={3} key={index}>
             <Card sx={{ 
@@ -82,37 +88,70 @@ const ContactPage = () => {
           </Grid>
         ))}
       </Grid>
-      
-      {/* قسم الخريطة */}
-      <Box>
+        <Box
+          sx={{
+            position: 'absolute',
+            top: '10%',
+            right: '5%',
+            width: { xs: 100, md: 200 },
+            height: { xs: 100, md: 200 },
+            borderRadius: '50%',
+            background: alpha(theme.palette.primary.light, 0.1),
+            filter: 'blur(40px)',
+            zIndex: 0,
+          }}
+        />
+        <Box
+          sx={{
+            position: 'absolute',
+            bottom: '5%',
+            left: '10%',
+            width: { xs: 80, md: 150 },
+            height: { xs: 80, md: 150 },
+            borderRadius: '50%',
+            background: alpha(theme.palette.secondary.main, 0.1),
+            background: alpha(theme.palette.primary.light, 0.1),
+            filter: 'blur(40px)',
+            zIndex: 0,
+          }}
+        />
+
+    </Box>
+
+          {/* قسم الخريطة */}
+      <Box sx={{
+        py:12,
+        px:{xs:2,md:8},
+        
+        ...theme.bgGrid3,   
+        borderColor:theme.palette.bg2.main, 
+        backgroundColor: theme.palette.bg1.main,  
+      }}>
         <Typography variant="h4" component="h2" textAlign="center" mb={4} color="primary">
           موقعنا على الخريطة
         </Typography>
-        <Card sx={{ ...theme.card1 }}>
-          <CardContent sx={{ p: 0 }}>
-            <Box 
-              sx={{ 
-                width: '100%', 
-                height: 400,
-                borderRadius: 1,
-                overflow: 'hidden'
-              }}
-            >
-              <iframe
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3624.4!2d46.6753!3d24.7136!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3e2f03890d489399%3A0xba974d1c98e79fd5!2z2KfZhNix2YrYp9i2INin2YTYs9i52YjYr9mK2Kk!5e0!3m2!1sar!2ssa!4v1234567890"
-                width="100%"
-                height="100%"
-                style={{ border: 0 }}
-                allowFullScreen=""
-                loading="lazy"
-                referrerPolicy="no-referrer-when-downgrade"
-                title="موقع المكتبة الوطنية"
-              />
-            </Box>
-          </CardContent>
-        </Card>
+
+          <Box 
+            sx={{ 
+              width: '100%', 
+              height: '400px',
+              borderRadius: 1,
+              ...theme.card2,
+              overflow: 'hidden'
+            }}
+          >
+            <iframe
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d175.0561202187751!2d13.34618998892887!3d32.88211972395786!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x13a89011f1a7ad53%3A0x71b3fc4afd4b6cc5!2z2YXZg9iq2KjYqSDYqtin2KzZiNix2KfYoQ!5e1!3m2!1sar!2sly!4v1753376038417!5m2!1sar!2sly"
+              width="100%"
+              height="100%"
+              style={{ border: 0,padding:'0px' }}
+              allowFullScreen=""
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+              title="موقع المكتبة الوطنية"
+            />
+          </Box>
       </Box>
-    </Box>
     </>
 
   );
