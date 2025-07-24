@@ -33,6 +33,7 @@ import {
   GitHub,
 } from '@mui/icons-material';
 import SchoolIcon from '@mui/icons-material/School';
+import InfoIcon from '@mui/icons-material/Info';
 import { ColorModeContext } from '../../contexts/ThemeContext';
 import MainTitle from '../MainTitle';
 import MainText from '../MainText';
@@ -47,6 +48,7 @@ const Header = () => {
 
   const navItems = [
     { label: 'الرئيسية', path: '/', icon: <Home /> },
+    { label: 'من نحن', path: '/about', icon: <InfoIcon /> },
     { label: 'البحث الأكاديمي', path: '/academic-search', icon: <Search /> },
     { label: 'المكتبة الإلكترونية', path: '/library', icon: <LibraryBooks /> },
     { label: 'معاملات جاهزة', path: '/ready-transactions', icon: <Assignment /> },
