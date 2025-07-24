@@ -10,6 +10,7 @@ const AcademicSearchPage = lazy(() => import('./pages/AcademicSearchPage'));
 const LibraryPage = lazy(() => import('./pages/LibraryPage'));
 const AboutPage = lazy(() => import('./pages/AboutPage'));
 const ReadyTransactions = lazy(() => import('./pages/ReadyTransactions'));
+const ContactPage = lazy(() => import('./pages/ContactPage'));
 
 const LoadingSpinner = () => (
   <div className="loading">
@@ -31,6 +32,7 @@ function App() {
               <Route path="library" element={<LibraryPage />} />
               <Route path="ready-transactions" element={<ReadyTransactions />} />
               <Route path="about" element={<AboutPage />} />
+              <Route path="contact" element={<ContactPage />} />
               <Route path="*" element={<NotFoundPage />} />
             </Route>
           </Routes>
