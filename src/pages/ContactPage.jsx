@@ -10,22 +10,26 @@ const ContactPage = () => {
     {
       icon: <Phone />,
       title: 'رقم الهاتف',
-      value: '+966 11 234 5678'
+      value: '+218 0000000  ',
+      action: () => window.open('tel:+2180000000')
     },
     {
       icon: <Email />,
       title: 'البريد الإلكتروني',
-      value: 'info@nationallibrary.sa'
+      value: 'info@nationallibrary.sa',
+      action: () => window.open('mailto:info@nationallibrary.sa')
     },
     {
       icon: <Facebook />,
       title: 'فيسبوك',
-      value: 'المكتبة المركزية '
+      value: 'المكتبة المركزية ',
+      action: () => window.open('https://www.facebook.com/Maktabatajora?rdid=z0nFsStIE3Dz9tWc&share_url=https%3A%2F%2Fwww.facebook.com%2Fshare%2F18dx6CgzLS%2F', '_blank')
     },
     {
       icon: <LocationOn />,
       title: 'العنوان ',
-      value: 'تاجوراء - طرابلس - ليبيا'
+      value: 'تاجوراء - طرابلس - ليبيا',
+      action: () => window.open('https://maps.app.goo.gl/aghJUTuZBPvbSMQV9', '_blank')
     }
   ];
 
@@ -52,17 +56,20 @@ const ContactPage = () => {
       <Grid container spacing={3} mt={4} mb={6}>
         {contactInfo.map((item, index) => (
           <Grid item xs={12} sm={6} md={3} key={index}>
-            <Card sx={{ 
-              height: '100%',
-              textAlign: 'center',
-              ...theme.card1,
-              '&:hover': {
-                transform: 'translateY(-4px)',
-                boxShadow: theme.palette.mode === 'light' 
-                  ? '0 12px 40px 0 rgba(26, 58, 110, 0.25)'
-                  : '0 12px 40px 0 rgba(0, 0, 0, 0.5)'
-              }
-            }}>
+            <Card 
+              onClick={item.action}
+              sx={{ 
+                height: '100%',
+                textAlign: 'center',
+                cursor: 'pointer',
+                ...theme.card1,
+                '&:hover': {
+                  transform: 'translateY(-4px)',
+                  boxShadow: theme.palette.mode === 'light' 
+                    ? '0 12px 40px 0 rgba(26, 58, 110, 0.25)'
+                    : '0 12px 40px 0 rgba(0, 0, 0, 0.5)'
+                }
+              }}>
               <CardContent sx={{ py: 3 }}>
                 <IconButton 
                   sx={{ 
